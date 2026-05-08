@@ -1,0 +1,13 @@
+{
+  "name": "prompt-analyzer",
+  "version": "1.0.0",
+  "description": "Analyze Claude Code prompting patterns and generate an HTML usage report with token costs, cache efficiency, repeated context detection, and improvement recommendations.",
+  "author": {
+    "name": "Ravi Patel",
+    "email": "raviprksh77@gmail.com",
+    "url": "https://github.com/ravipatel"
+  },
+  "repository": "https://github.com/ravipatel7/prompt-analyzer",
+  "license": "MIT",
+  "keywords": ["analytics", "token-usage", "cache", "cost", "prompts", "reporting"]
+}

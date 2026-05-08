@@ -1,0 +1,51 @@
+{
+  "name": "@ravipatel7/prompt-analyzer",
+  "version": "1.0.0",
+  "description": "Analyze Claude Code session data — token usage, cache efficiency, cost estimates, and prompt improvement recommendations",
+  "main": "src/index.js",
+  "bin": {
+    "prompt-analyzer": "./bin/cli.js"
+  },
+  "scripts": {
+    "test": "node --test src/**/*.test.js",
+    "start": "node bin/cli.js"
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "prompt",
+    "analytics",
+    "token-usage",
+    "cache",
+    "anthropic"
+  ],
+  "author": {
+    "name": "Ravi Patel",
+    "email": "raviprksh77@gmail.com"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ravipatel7/prompt-analyzer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ravipatel7/prompt-analyzer/issues"
+  },
+  "homepage": "https://github.com/ravipatel7/prompt-analyzer#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "templates/",
+    "skills/",
+    ".claude-plugin/",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {}
+}
