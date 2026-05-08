@@ -4,7 +4,7 @@
   "description": "Analyze Claude Code session data — token usage, cache efficiency, cost estimates, and prompt improvement recommendations",
   "main": "src/index.js",
   "bin": {
-    "prompt-analyzer": "./bin/cli.js"
+    "prompt-analyzer": "bin/cli.js"
   },
   "scripts": {
     "test": "node --test src/**/*.test.js",
