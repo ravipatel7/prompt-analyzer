@@ -5,7 +5,7 @@ const path = require('path');
 const { getPluginCacheDir, getInstalledPluginsPath, getSettingsPath, getLocalPluginDir } = require('../utils/paths');
 const { safeReadJSON, safeWriteJSON } = require('../utils/json-writer');
 
-const PLUGIN_NAME = 'prompt-analyser';
+const PLUGIN_NAME = 'prompt-analyzer';
 const MARKETPLACE = 'npm-ravilabs';
 const PLUGIN_KEY = `${PLUGIN_NAME}@${MARKETPLACE}`;
 

@@ -1,4 +1,4 @@
-# @ravilabs/prompt-analyser
+# @ravilabs/prompt-analyzer
 
 Analyze your Claude Code session data and generate a rich HTML report covering token usage, cache efficiency, API cost estimates, repeated prompt patterns, and actionable improvement recommendations.
 
@@ -6,10 +6,10 @@ Analyze your Claude Code session data and generate a rich HTML report covering t
 
 ```bash
 # Run analysis and open HTML report in browser
-npx @ravilabs/prompt-analyser
+npx @ravilabs/prompt-analyzer
 
 # Install the /prompt-analysis skill into Claude Code
-npx @ravilabs/prompt-analyser install
+npx @ravilabs/prompt-analyzer install
 ```
 
 ## What You Get
@@ -29,11 +29,11 @@ The HTML report includes:
 ## Commands
 
 ```
-npx @ravilabs/prompt-analyser              # Analyze + open report in browser
-npx @ravilabs/prompt-analyser analyze      # Analyze only (CI-friendly, no browser)
-npx @ravilabs/prompt-analyser install      # Install skill globally to Claude Code
-npx @ravilabs/prompt-analyser install --local  # Install skill to current project
-npx @ravilabs/prompt-analyser help         # Show help
+npx @ravilabs/prompt-analyzer              # Analyze + open report in browser
+npx @ravilabs/prompt-analyzer analyze      # Analyze only (CI-friendly, no browser)
+npx @ravilabs/prompt-analyzer install      # Install skill globally to Claude Code
+npx @ravilabs/prompt-analyzer install --local  # Install skill to current project
+npx @ravilabs/prompt-analyzer help         # Show help
 ```
 
 ## Claude Code Skill
