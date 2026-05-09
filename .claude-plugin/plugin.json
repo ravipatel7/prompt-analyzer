@@ -1,5 +1,5 @@
 {
-  "name": "prompt-analyzer",
+  "name": "prompt-analyser",
   "version": "1.0.0",
   "description": "Analyze Claude Code prompting patterns and generate an HTML usage report with token costs, cache efficiency, repeated context detection, and improvement recommendations.",
   "author": {

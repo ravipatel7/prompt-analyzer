@@ -88,15 +88,18 @@ async function parseSessionFile(filePath, projectKey, sessionId) {
         for (const part of content) {
           if (part.type === 'text') promptText += part.text || '';
           if (part.type === 'image') hasImage = true;
-          // Detect tool_result entries — these are bash/file outputs injected by Claude Code,
-          // not the human's actual typed prompt. Skip messages that are purely tool results.
+          // tool_result parts are bash/file outputs injected by Claude Code
           if (part.type === 'tool_result') hasToolResult = true;
         }
       }
 
-      // Skip messages that are only tool results with no human text — they
-      // distort verbosity and cluster metrics (bash output, file reads, etc.)
-      const isHumanPrompt = promptText.trim().length > 0 && !hasToolResult;
+      // System-injected context turns: Claude Code injects these as user-turn text
+      // but they are never typed by the human and should not appear in prompting analysis.
+      const SYSTEM_INJECTION_RE = /^\s*(<(local-command-caveat|ide_opened_file|command-name|command-message|local-command-stdout|local-command-stderr|bash-input|bash-stdout|bash-stderr|system-reminder|antml:function_calls)[>\s/]|\[Image:\s*(original|source)|\[Request interrupted|\[NOTE\]|<\?xml)/i;
+      const isSystemInjection = SYSTEM_INJECTION_RE.test(promptText);
+
+      // A genuine human prompt: has text, no tool results, not a system injection
+      const isHumanPrompt = promptText.trim().length > 0 && !hasToolResult && !isSystemInjection;
 
       messages.push({
         type: 'user',

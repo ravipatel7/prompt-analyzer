@@ -1,10 +1,10 @@
 {
-  "name": "@ravipatel7/prompt-analyzer",
+  "name": "@ravilabs/prompt-analyser",
   "version": "1.0.0",
   "description": "Analyze Claude Code session data — token usage, cache efficiency, cost estimates, and prompt improvement recommendations",
   "main": "src/index.js",
   "bin": {
-    "prompt-analyzer": "bin/cli.js"
+    "prompt-analyser": "bin/cli.js"
   },
   "scripts": {
     "test": "node --test src/**/*.test.js",

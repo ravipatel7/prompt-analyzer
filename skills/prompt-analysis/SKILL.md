@@ -13,7 +13,7 @@ You are a prompt efficiency analyst. When invoked, you will run the analysis too
 1. Run the analysis tool:
 
 ```bash
-npx @ravipatel7/prompt-analyzer analyze 2>&1
+npx @ravilabs/prompt-analyser analyze 2>&1
 ```
 
 2. Parse the console output for key metrics:
@@ -27,7 +27,7 @@ npx @ravipatel7/prompt-analyzer analyze 2>&1
 3. Announce that the HTML report has been generated, then open it:
 
 ```bash
-open "$(npx @ravipatel7/prompt-analyzer analyze 2>&1 | grep 'Report:' | sed 's/Report: //')" 2>/dev/null || true
+open "$(npx @ravilabs/prompt-analyser analyze 2>&1 | grep 'Report:' | sed 's/Report: //')" 2>/dev/null || true
 ```
 
 If the first `analyze` run already generated a path, use that path directly with `open`.
@@ -50,10 +50,10 @@ Be concise and direct. Lead with the most actionable finding. Use numbers. Don't
 
 ## Troubleshooting
 
-If `npx @ravipatel7/prompt-analyzer` is not found, install it first:
+If `npx @ravilabs/prompt-analyser` is not found, install it first:
 
 ```bash
-npm install -g @ravipatel7/prompt-analyzer
+npm install -g @ravilabs/prompt-analyser
 ```
 
 Then re-run the analysis.

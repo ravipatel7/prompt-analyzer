@@ -6,236 +6,948 @@
 <title>Prompt Analysis — Claude Code</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+/* ── TOKENS ── */
 :root{
-  --bg:#09090b;--surface:#18181b;--surface-2:#1c1c1f;--surface-hover:#27272a;
-  --border:#27272a;--border-subtle:#1f1f23;
-  --fg:#fafafa;--fg-2:#a1a1aa;--fg-3:#52525b;
-  --accent:#f97316;--accent-dim:rgba(249,115,22,.12);--accent-border:rgba(249,115,22,.3);
-  --green:#22c55e;--green-dim:rgba(34,197,94,.1);--green-border:rgba(34,197,94,.25);
-  --yellow:#eab308;--yellow-dim:rgba(234,179,8,.1);--yellow-border:rgba(234,179,8,.25);
-  --red:#ef4444;--red-dim:rgba(239,68,68,.1);--red-border:rgba(239,68,68,.25);
-  --blue:#3b82f6;--blue-dim:rgba(59,130,246,.1);--blue-border:rgba(59,130,246,.25);
-  --purple:#a855f7;--purple-dim:rgba(168,85,247,.1);--purple-border:rgba(168,85,247,.25);
-  --radius:8px;--radius-lg:12px;--shadow:0 1px 3px rgba(0,0,0,.5),0 1px 2px rgba(0,0,0,.4);
+  --bg:#090A0E;
+  --surface:#0F1118;
+  --surface-2:#14161F;
+  --surface-hover:#1C1F2E;
+  --border:#242840;
+  --border-subtle:#1A1C2C;
+
+  --fg:#D0D4EE;
+  --fg-2:#707898;
+  --fg-3:#424666;
+
+  --brand:#F5A300;
+  --brand-hover:#FFBA30;
+  --brand-light:#FFD580;
+  --brand-dim:rgba(245,163,0,.08);
+  --brand-border:rgba(245,163,0,.2);
+
+  --green:#00C99A;
+  --green-dim:rgba(0,201,154,.08);
+  --green-border:rgba(0,201,154,.2);
+
+  --yellow:#F5C400;
+  --yellow-dim:rgba(245,196,0,.08);
+  --yellow-border:rgba(245,196,0,.2);
+
+  --red:#FF5245;
+  --red-dim:rgba(255,82,69,.08);
+  --red-border:rgba(255,82,69,.2);
+
+  --blue:#5B9EFF;
+  --blue-dim:rgba(91,158,255,.08);
+  --blue-border:rgba(91,158,255,.2);
+
+  --orange:#FF7A30;
+  --orange-dim:rgba(255,122,48,.08);
+  --orange-border:rgba(255,122,48,.2);
+
+  --purple:#A87FFC;
+  --purple-dim:rgba(168,127,252,.08);
+  --purple-border:rgba(168,127,252,.2);
+
+  --radius:6px;--radius-lg:10px;--radius-xl:14px;
+
+  --shadow:0 1px 4px rgba(0,0,0,.9),0 1px 2px rgba(0,0,0,.7);
+  --shadow-md:0 4px 20px rgba(0,0,0,.8),0 2px 8px rgba(0,0,0,.6);
+  --shadow-lg:0 8px 40px rgba(0,0,0,.9),0 4px 16px rgba(0,0,0,.7);
 }
+
 [data-theme="light"]{
-  --bg:#f4f4f5;--surface:#ffffff;--surface-2:#fafafa;--surface-hover:#f4f4f5;
-  --border:#e4e4e7;--border-subtle:#f0f0f2;
-  --fg:#09090b;--fg-2:#52525b;--fg-3:#a1a1aa;
-  --accent:#ea580c;--accent-dim:rgba(234,88,12,.08);--accent-border:rgba(234,88,12,.2);
-  --green-dim:rgba(34,197,94,.08);--green-border:rgba(34,197,94,.2);
-  --yellow-dim:rgba(234,179,8,.08);--yellow-border:rgba(234,179,8,.2);
-  --red-dim:rgba(239,68,68,.08);--red-border:rgba(239,68,68,.2);
-  --blue-dim:rgba(59,130,246,.08);--blue-border:rgba(59,130,246,.2);
-  --purple-dim:rgba(168,85,247,.08);--purple-border:rgba(168,85,247,.2);
-  --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+  --bg:#F2EDE0;
+  --surface:#FAF6ED;
+  --surface-2:#EDE6D6;
+  --surface-hover:#E4DACB;
+  --border:#CBBFA8;
+  --border-subtle:#D8CDB8;
+  --fg:#1A1408;
+  --fg-2:#4A3C28;
+  --fg-3:#8A7A5A;
+  --brand:#B85800;
+  --brand-hover:#993C00;
+  --brand-light:#E07800;
+  --brand-dim:rgba(184,88,0,.09);
+  --brand-border:rgba(184,88,0,.28);
+  --green:#006E52;
+  --green-dim:rgba(0,110,82,.09);
+  --green-border:rgba(0,110,82,.28);
+  --yellow:#7A5400;
+  --yellow-dim:rgba(122,84,0,.09);
+  --yellow-border:rgba(122,84,0,.28);
+  --red:#C42B1A;
+  --red-dim:rgba(196,43,26,.09);
+  --red-border:rgba(196,43,26,.28);
+  --blue:#1A4FC8;
+  --blue-dim:rgba(26,79,200,.09);
+  --blue-border:rgba(26,79,200,.28);
+  --orange:#A03800;
+  --orange-dim:rgba(160,56,0,.09);
+  --orange-border:rgba(160,56,0,.28);
+  --purple:#5A28A8;
+  --purple-dim:rgba(90,40,168,.09);
+  --purple-border:rgba(90,40,168,.28);
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.07);
+  --shadow-md:0 4px 14px rgba(0,0,0,.09),0 2px 6px rgba(0,0,0,.06);
+  --shadow-lg:0 8px 30px rgba(0,0,0,.1),0 4px 12px rgba(0,0,0,.07);
 }
+
+/* ── BASE ── */
 html{font-size:14px;scroll-behavior:smooth}
-body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--fg);
-  min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.5}
+body{
+  font-family:'DM Sans','Helvetica Neue',system-ui,sans-serif;
+  background:var(--bg);color:var(--fg);
+  min-height:100vh;-webkit-font-smoothing:antialiased;
+  line-height:1.55;position:relative;
+  animation:pageIn .35s ease both;
+}
+
+@keyframes pageIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes barFill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+/* Dot-grid atmosphere */
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(rgba(255,255,255,.035) 1px, transparent 1px);
+  background-size:26px 26px;
+}
+[data-theme="light"] body::before{
+  background-image:radial-gradient(rgba(0,0,0,.055) 1px, transparent 1px);
+}
+
 a{color:inherit;text-decoration:none}
-/* ─ LAYOUT ─────────────────────────────── */
-.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
-section{padding:48px 0}
-section+section{border-top:1px solid var(--border-subtle)}
-.section-kicker{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
-  color:var(--fg-3);margin-bottom:6px}
-.section-title{font-size:22px;font-weight:700;margin-bottom:24px}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.grid-6{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
-@media(max-width:960px){.grid-6{grid-template-columns:repeat(3,1fr)}.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}}
-@media(max-width:540px){.grid-6{grid-template-columns:repeat(2,1fr)}}
-/* ─ HEADER ─────────────────────────────── */
-.header{position:sticky;top:0;z-index:200;background:var(--surface);
-  border-bottom:1px solid var(--border);height:56px;
-  display:flex;align-items:center;justify-content:space-between;padding:0 24px}
-.header-brand{display:flex;align-items:center;gap:12px}
-.logo{width:30px;height:30px;border-radius:8px;
-  background:linear-gradient(135deg,#f97316 0%,#ea580c 100%);
-  display:flex;align-items:center;justify-content:center;
-  font-weight:700;font-size:14px;color:#fff;flex-shrink:0}
-.brand-text h1{font-size:15px;font-weight:600;line-height:1.2}
-.brand-text p{font-size:11px;color:var(--fg-3);font-family:'JetBrains Mono',monospace}
-.header-actions{display:flex;align-items:center;gap:10px}
-.theme-toggle{height:32px;padding:0 12px;border-radius:var(--radius);
+
+/* ── LAYOUT ── */
+.wrap{max-width:1220px;margin:0 auto;padding:0 28px;position:relative;z-index:1}
+section{padding:60px 0}
+section+section{border-top:1px solid var(--border)}
+.section-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Fira Code',monospace;font-size:10px;font-weight:600;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--brand);
+  margin-bottom:10px;
+}
+.section-eyebrow::before{content:'';display:block;width:20px;height:1px;background:var(--brand);opacity:.6}
+.section-heading{
+  font-family:'Syne',sans-serif;font-size:26px;font-weight:800;
+  color:var(--fg);margin-bottom:8px;letter-spacing:-.025em;line-height:1.15;
+}
+.section-desc{font-size:13px;color:var(--fg-3);margin-bottom:32px;line-height:1.65;max-width:680px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.grid-6{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
+@media(max-width:1024px){.grid-6{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:768px){.grid-6{grid-template-columns:repeat(2,1fr)}.grid-2,.grid-3{grid-template-columns:1fr}}
+@media(max-width:480px){.grid-6{grid-template-columns:1fr 1fr}}
+
+/* ── HEADER ── */
+.header{
+  position:sticky;top:0;z-index:300;
+  background:rgba(9,10,14,.94);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+  height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;
+}
+[data-theme="light"] .header{background:rgba(242,237,224,.94)}
+.header-brand{display:flex;align-items:center;gap:14px}
+.logo{
+  font-family:'Fira Code',monospace;font-size:12px;font-weight:600;
+  color:var(--brand);background:var(--brand-dim);
+  border:1px solid var(--brand-border);padding:5px 11px;
+  border-radius:6px;letter-spacing:.04em;flex-shrink:0;
+  box-shadow:0 0 12px rgba(245,163,0,.12);
+}
+.brand-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--fg);letter-spacing:-.01em}
+.brand-sub{font-family:'Fira Code',monospace;font-size:10px;color:var(--fg-3);margin-top:2px;letter-spacing:.02em}
+.header-right{display:flex;align-items:center;gap:8px}
+.theme-btn{
+  height:30px;padding:0 12px;border-radius:6px;
   border:1px solid var(--border);background:transparent;color:var(--fg-2);
-  font-size:12px;font-family:'Inter',sans-serif;cursor:pointer;
-  display:flex;align-items:center;gap:6px;transition:border-color .15s,color .15s}
-.theme-toggle:hover{border-color:var(--accent);color:var(--fg)}
-.theme-toggle svg{width:13px;height:13px;flex-shrink:0}
-/* ─ NAV ─────────────────────────────────── */
-.nav{background:var(--surface);border-bottom:1px solid var(--border);
-  overflow-x:auto;scrollbar-width:none}
+  font-size:11px;font-weight:500;font-family:'Fira Code',monospace;cursor:pointer;
+  display:flex;align-items:center;gap:6px;transition:all .15s;letter-spacing:.02em;
+}
+.theme-btn:hover{border-color:var(--brand);color:var(--brand);background:var(--brand-dim)}
+.theme-btn svg{width:12px;height:12px;flex-shrink:0}
+
+/* ── TIME RANGE ── */
+.timerange{
+  position:sticky;top:56px;z-index:200;
+  background:rgba(9,10,14,.94);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);padding:9px 28px;
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+}
+[data-theme="light"] .timerange{background:rgba(242,237,224,.94)}
+.timerange-label{font-family:'Fira Code',monospace;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--fg-3);white-space:nowrap}
+.timerange-dates{font-family:'Fira Code',monospace;font-size:11px;font-weight:600;color:var(--brand);white-space:nowrap;min-width:220px;letter-spacing:.02em}
+.timerange-slider-wrap{flex:1;min-width:180px;max-width:500px;position:relative;height:26px;display:flex;align-items:center}
+.tr-track{position:absolute;left:0;right:0;height:3px;background:var(--border);border-radius:2px;pointer-events:none}
+.tr-fill{position:absolute;height:100%;background:var(--brand);border-radius:2px;left:0;width:100%;transition:none;box-shadow:0 0 6px rgba(245,163,0,.4)}
+.tr-thumb{
+  position:absolute;width:100%;height:26px;top:0;left:0;
+  background:transparent;-webkit-appearance:none;appearance:none;pointer-events:none;outline:none
+}
+.tr-thumb::-webkit-slider-thumb{
+  -webkit-appearance:none;width:16px;height:16px;border-radius:50%;
+  background:var(--brand);border:2px solid var(--surface);
+  box-shadow:0 0 0 1.5px var(--brand),0 0 10px rgba(245,163,0,.35);
+  cursor:pointer;pointer-events:all;transition:transform .12s;
+}
+.tr-thumb::-webkit-slider-thumb:hover{transform:scale(1.25)}
+.tr-thumb::-moz-range-thumb{
+  width:14px;height:14px;border-radius:50%;background:var(--brand);
+  border:2px solid var(--surface);cursor:pointer;pointer-events:all
+}
+.tr-reset{
+  height:26px;padding:0 11px;border-radius:6px;border:1px solid var(--border);
+  background:transparent;color:var(--fg-3);
+  font-family:'Fira Code',monospace;font-size:10px;font-weight:600;letter-spacing:.04em;
+  cursor:pointer;white-space:nowrap;transition:all .15s;
+}
+.tr-reset:hover{border-color:var(--brand);color:var(--brand);background:var(--brand-dim)}
+.tr-note{font-family:'Fira Code',monospace;font-size:10px;color:var(--fg-3);letter-spacing:.02em;white-space:nowrap}
+
+/* ── NAV ── */
+.nav{
+  background:var(--surface);border-bottom:1px solid var(--border);
+  overflow-x:auto;scrollbar-width:none;position:sticky;top:56px;z-index:150;
+}
 .nav::-webkit-scrollbar{display:none}
-.nav-inner{display:flex;padding:0 24px;min-width:max-content}
-.nav a{display:inline-flex;align-items:center;padding:0 14px;height:44px;
-  font-size:13px;font-weight:500;color:var(--fg-3);white-space:nowrap;
-  border-bottom:2px solid transparent;transition:color .15s,border-color .15s}
-.nav a:hover{color:var(--fg);border-color:var(--border)}
-.nav a.active{color:var(--fg);border-color:var(--accent)}
-/* ─ CARD ─────────────────────────────────── */
-.card{background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--radius-lg);box-shadow:var(--shadow);overflow:hidden}
-.card-pad{padding:20px 24px}
-.card-title{font-size:11px;font-weight:600;letter-spacing:.06em;
-  text-transform:uppercase;color:var(--fg-3);margin-bottom:16px}
-/* ─ STAT CARD ────────────────────────────── */
-.stat-card{background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--radius-lg);padding:18px 20px;box-shadow:var(--shadow);
-  transition:border-color .15s,transform .15s;position:relative;overflow:hidden}
-.stat-card:hover{border-color:var(--fg-3);transform:translateY(-1px)}
-.stat-card::before{content:'';position:absolute;top:0;left:0;width:3px;
-  height:100%;background:var(--accent-line,transparent);border-radius:var(--radius-lg) 0 0 var(--radius-lg)}
-.stat-card.green::before{--accent-line:var(--green)}
-.stat-card.yellow::before{--accent-line:var(--yellow)}
-.stat-card.red::before{--accent-line:var(--red)}
-.stat-card.orange::before{--accent-line:var(--accent)}
-.stat-label{font-size:11px;font-weight:500;color:var(--fg-3);
-  text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
-.stat-value{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:600;
-  line-height:1;letter-spacing:-.02em;color:var(--fg);margin-bottom:8px}
-.stat-value.accent{color:var(--accent)}
-.stat-value.green{color:var(--green)}
+.nav-inner{display:flex;padding:0 22px;gap:2px;min-width:max-content}
+.nav a{
+  display:inline-flex;align-items:center;padding:0 13px;height:42px;
+  font-family:'Fira Code',monospace;font-size:11px;font-weight:500;letter-spacing:.04em;
+  color:var(--fg-3);white-space:nowrap;
+  border-radius:6px;margin:5px 0;transition:all .15s;
+}
+.nav a:hover{color:var(--fg);background:var(--surface-hover)}
+.nav a.active{color:var(--brand);background:var(--brand-dim);font-weight:600}
+
+/* ── CARD ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow)}
+.card-pad{padding:22px 24px}
+.card-title{
+  font-family:'Fira Code',monospace;font-size:10px;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--fg-3);margin-bottom:18px;
+}
+
+/* ── STAT CARD ── */
+.stat-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:20px 22px 18px;
+  box-shadow:var(--shadow);
+  transition:box-shadow .25s,transform .25s,border-color .2s;
+  position:relative;overflow:hidden;
+  animation:slideUp .5s both;
+}
+.stat-card::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:var(--card-accent,transparent);opacity:.6;
+}
+.stat-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.stat-card.green {border-color:rgba(0,201,154,.25);--card-accent:var(--green)}
+.stat-card.yellow{border-color:rgba(245,196,0,.25);--card-accent:var(--yellow)}
+.stat-card.red   {border-color:rgba(255,82,69,.25); --card-accent:var(--red)}
+.stat-card.orange{border-color:rgba(255,122,48,.25);--card-accent:var(--orange)}
+.stat-card.blue  {border-color:rgba(91,158,255,.25);--card-accent:var(--blue)}
+.stat-card.brand {border-color:rgba(245,163,0,.25); --card-accent:var(--brand)}
+.stat-card.purple{border-color:rgba(168,127,252,.25);--card-accent:var(--purple)}
+.stat-card:nth-child(1){animation-delay:.05s}
+.stat-card:nth-child(2){animation-delay:.10s}
+.stat-card:nth-child(3){animation-delay:.15s}
+.stat-card:nth-child(4){animation-delay:.20s}
+.stat-card:nth-child(5){animation-delay:.25s}
+.stat-card:nth-child(6){animation-delay:.30s}
+
+.stat-label{
+  font-family:'Fira Code',monospace;font-size:9px;font-weight:600;
+  color:var(--fg-3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:12px;
+}
+.stat-value{
+  font-family:'Bebas Neue',sans-serif;font-size:46px;font-weight:400;
+  line-height:.9;letter-spacing:.01em;color:var(--fg);
+  margin-bottom:10px;font-variant-numeric:tabular-nums;
+}
+.stat-value.accent{color:var(--brand)}
+.stat-value.green {color:var(--green)}
 .stat-value.yellow{color:var(--yellow)}
-.stat-value.red{color:var(--red)}
-.stat-sub{font-size:12px;color:var(--fg-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-/* ─ TOKEN BAR ────────────────────────────── */
-.token-bar-wrap{margin-bottom:16px}
+.stat-value.red   {color:var(--red)}
+.stat-value.purple{color:var(--purple)}
+.stat-sub{font-size:12px;color:var(--fg-3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ── TOKEN BAR ── */
+.token-bar-wrap{margin-bottom:14px}
 .token-bar{display:flex;height:8px;border-radius:4px;overflow:hidden;gap:2px}
-.token-bar-seg{height:100%;border-radius:2px;min-width:2px;transition:opacity .2s}
-.token-bar-seg:hover{opacity:.8}
-.token-legend{display:flex;flex-wrap:wrap;gap:12px 20px;margin-top:12px}
-.token-legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--fg-2)}
+.token-bar-seg{height:100%;border-radius:2px;min-width:3px;transition:opacity .2s}
+.token-bar-seg:hover{opacity:.7}
+.token-legend{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:18px}
+.token-legend-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--fg-2)}
 .token-legend-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
-.token-legend-val{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--fg-3);margin-left:2px}
-/* ─ TABLE ────────────────────────────────── */
+.token-legend-val{font-family:'Fira Code',monospace;font-size:11px;color:var(--fg-3);font-variant-numeric:tabular-nums;margin-left:2px}
+
+/* ── TABLE ── */
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:13px}
 thead tr{border-bottom:1px solid var(--border)}
-th{padding:8px 12px;font-size:11px;font-weight:600;color:var(--fg-3);
-  text-transform:uppercase;letter-spacing:.05em;text-align:left;white-space:nowrap}
+th{
+  padding:8px 12px;font-family:'Fira Code',monospace;font-size:9px;font-weight:600;
+  color:var(--fg-3);text-transform:uppercase;letter-spacing:.1em;
+  text-align:left;white-space:nowrap;background:var(--surface-2);
+}
 th.r,td.r{text-align:right}
-td{padding:11px 12px;border-bottom:1px solid var(--border-subtle);color:var(--fg-2)}
+td{padding:11px 12px;border-bottom:1px solid var(--border-subtle);color:var(--fg-2);font-size:13px}
 tr:last-child td{border-bottom:none}
 tbody tr{transition:background .1s}
-tbody tr:hover td{background:var(--surface-hover)}
-.mono{font-family:'JetBrains Mono',monospace;font-size:12px}
-/* ─ BADGE ────────────────────────────────── */
-.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;
-  font-size:11px;font-weight:600;letter-spacing:.02em;white-space:nowrap}
-.badge-green{background:var(--green-dim);color:var(--green);border:1px solid var(--green-border)}
+tbody tr:hover td{background:var(--surface-hover);color:var(--fg)}
+.mono{font-family:'Fira Code',monospace;font-size:12px;font-variant-numeric:tabular-nums}
+
+/* ── BADGE ── */
+.badge{
+  display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;
+  font-family:'Fira Code',monospace;font-size:10px;font-weight:600;
+  letter-spacing:.04em;white-space:nowrap;
+}
+.badge-green {background:var(--green-dim); color:var(--green); border:1px solid var(--green-border)}
 .badge-yellow{background:var(--yellow-dim);color:var(--yellow);border:1px solid var(--yellow-border)}
-.badge-red{background:var(--red-dim);color:var(--red);border:1px solid var(--red-border)}
-.badge-orange{background:var(--accent-dim);color:var(--accent);border:1px solid var(--accent-border)}
-.badge-blue{background:var(--blue-dim);color:var(--blue);border:1px solid var(--blue-border)}
-/* ─ CHART CONTAINER ─────────────────────── */
+.badge-red   {background:var(--red-dim);   color:var(--red);   border:1px solid var(--red-border)}
+.badge-orange{background:var(--orange-dim);color:var(--orange);border:1px solid var(--orange-border)}
+.badge-blue  {background:var(--blue-dim);  color:var(--blue);  border:1px solid var(--blue-border)}
+.badge-brand {background:var(--brand-dim); color:var(--brand); border:1px solid var(--brand-border)}
+.badge-purple{background:var(--purple-dim);color:var(--purple);border:1px solid var(--purple-border)}
+
+/* ── CHART ── */
 .chart-box{position:relative}
-/* ─ CACHE DONUT CENTER ───────────────────── */
+
+/* ── DONUT ── */
 .donut-wrap{position:relative;display:flex;align-items:center;justify-content:center}
 .donut-center{position:absolute;text-align:center;pointer-events:none}
-.donut-center-pct{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:600;line-height:1}
-.donut-center-label{font-size:11px;color:var(--fg-3);margin-top:2px}
-/* ─ METRIC ROW ───────────────────────────── */
+.donut-center-pct{
+  font-family:'Bebas Neue',sans-serif;font-size:38px;font-weight:400;
+  line-height:1;letter-spacing:.02em;font-variant-numeric:tabular-nums;
+}
+.donut-center-label{font-family:'Fira Code',monospace;font-size:9px;font-weight:600;color:var(--fg-3);margin-top:4px;text-transform:uppercase;letter-spacing:.1em}
+
+/* ── METRIC ROWS ── */
 .metric-rows{display:flex;flex-direction:column}
-.metric-row{display:flex;justify-content:space-between;align-items:center;
-  padding:11px 0;border-bottom:1px solid var(--border-subtle)}
+.metric-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border-subtle)}
 .metric-row:last-child{border-bottom:none}
 .metric-label{font-size:13px;color:var(--fg-2)}
-.metric-val{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;color:var(--fg)}
-/* ─ CLUSTER ──────────────────────────────── */
-.cluster-header{display:grid;grid-template-columns:1fr 70px 70px;gap:12px;
-  padding:10px 16px;border-bottom:1px solid var(--border)}
-.cluster-row{display:grid;grid-template-columns:1fr 70px 70px;gap:12px;
-  padding:12px 16px;border-bottom:1px solid var(--border-subtle);
-  align-items:center;transition:background .1s}
+.metric-val{font-family:'Fira Code',monospace;font-size:12px;font-weight:600;color:var(--fg);font-variant-numeric:tabular-nums}
+
+/* ── SAVINGS BOX ── */
+.savings-box{
+  margin-top:16px;padding:14px 16px;border-radius:var(--radius);
+  background:var(--green-dim);border:1px solid var(--green-border);
+}
+.savings-title{font-size:13px;font-weight:600;color:var(--green);margin-bottom:4px;letter-spacing:-.01em}
+.savings-sub{font-family:'Fira Code',monospace;font-size:11px;color:var(--fg-3)}
+
+/* ── NOTE BOX ── */
+.note-box{
+  margin-top:16px;padding:12px 16px;border-radius:var(--radius);
+  background:var(--surface-2);border:1px solid var(--border);
+  font-size:12px;color:var(--fg-3);line-height:1.65;
+  border-left:2px solid var(--brand);
+}
+
+/* ── PROMPTING SCORE ── */
+.score-layout{display:grid;grid-template-columns:260px 1fr;gap:24px;align-items:start}
+@media(max-width:768px){.score-layout{grid-template-columns:1fr}}
+
+.score-gauge-wrap{
+  display:flex;flex-direction:column;align-items:center;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-xl);padding:28px 24px;box-shadow:var(--shadow);
+}
+.score-ring-outer{position:relative;width:180px;height:180px}
+.score-ring-outer svg{width:100%;height:100%}
+.score-ring-outer svg circle:last-of-type{
+  filter:drop-shadow(0 0 10px rgba(245,163,0,.4));
+}
+.score-ring-center{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;
+}
+.score-grade-text{
+  font-family:'Bebas Neue',sans-serif;font-size:62px;font-weight:400;
+  letter-spacing:.02em;line-height:1;
+}
+.score-pts-text{font-family:'Fira Code',monospace;font-size:12px;font-weight:600;color:var(--fg-3);margin-top:6px;letter-spacing:.04em}
+.score-meta{margin-top:14px;text-align:center}
+.score-meta-count{font-family:'Fira Code',monospace;font-size:11px;color:var(--fg-3);letter-spacing:.02em}
+
+.dim-list{display:flex;flex-direction:column;gap:16px}
+.dim-row{}
+.dim-row-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
+.dim-row-label{font-size:13px;font-weight:500;color:var(--fg)}
+.dim-row-meta{font-family:'Fira Code',monospace;font-size:11px;color:var(--fg-3);font-variant-numeric:tabular-nums}
+.dim-track{height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.dim-fill{height:100%;border-radius:3px;transition:width 1s cubic-bezier(.4,0,.2,1)}
+.dim-tip{font-family:'Fira Code',monospace;font-size:10px;color:var(--fg-3);margin-top:5px;letter-spacing:.01em}
+
+.score-examples-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:0}
+@media(max-width:768px){.score-examples-grid{grid-template-columns:1fr}}
+.score-ex-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:16px;position:relative;
+}
+.score-ex-card.good{border-left:2px solid var(--green)}
+.score-ex-card.weak{border-left:2px solid var(--orange)}
+.score-ex-label{
+  font-family:'Fira Code',monospace;font-size:9px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;
+}
+.score-ex-label.good{color:var(--green)}
+.score-ex-label.weak{color:var(--orange)}
+.score-ex-text{font-size:13px;color:var(--fg-2);line-height:1.65;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
+.score-ex-badge{position:absolute;top:12px;right:12px}
+
+/* ── INTERACTION PATTERNS ── */
+.pattern-chips{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+@media(max-width:600px){.pattern-chips{grid-template-columns:1fr 1fr}}
+.pattern-chip{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);
+  padding:18px 16px;transition:box-shadow .2s,transform .2s,border-color .2s;text-align:center;
+}
+.pattern-chip:hover{
+  box-shadow:var(--shadow-md);transform:translateY(-2px);
+  border-color:var(--brand-border);
+}
+.pattern-chip-icon{font-size:20px;margin-bottom:10px;display:block}
+.pattern-chip-count{
+  font-family:'Bebas Neue',sans-serif;font-size:36px;font-weight:400;
+  letter-spacing:.02em;font-variant-numeric:tabular-nums;color:var(--fg);line-height:1;
+}
+.pattern-chip-label{
+  font-family:'Fira Code',monospace;font-size:9px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.12em;color:var(--brand);margin-top:6px;
+}
+.pattern-chip-desc{font-size:11px;color:var(--fg-3);margin-top:6px;line-height:1.5}
+
+/* ── CLUSTER ── */
+.cluster-header{
+  display:grid;grid-template-columns:1fr 70px 76px;gap:12px;
+  padding:10px 18px;border-bottom:1px solid var(--border);
+  background:var(--surface-2);border-radius:var(--radius-lg) var(--radius-lg) 0 0;
+}
+.cluster-row{
+  display:grid;grid-template-columns:1fr 70px 76px;gap:12px;
+  padding:13px 18px;border-bottom:1px solid var(--border-subtle);
+  align-items:center;transition:background .1s;
+}
 .cluster-row:last-child{border-bottom:none}
 .cluster-row:hover{background:var(--surface-hover)}
-.cluster-text{font-size:13px;color:var(--fg-2);overflow:hidden;
-  text-overflow:ellipsis;white-space:nowrap}
-.cluster-footer{padding:12px 16px;border-top:1px solid var(--border);
-  font-size:12px;color:var(--fg-3);background:var(--surface-2)}
-/* ─ RECOMMENDATION CARD ──────────────────── */
-.rec-card{border-radius:var(--radius-lg);padding:20px;border:1px solid var(--border)}
-.rec-card.high{background:var(--red-dim);border-color:var(--red-border)}
-.rec-card.medium{background:var(--yellow-dim);border-color:var(--yellow-border)}
-.rec-card.low{background:var(--blue-dim);border-color:var(--blue-border)}
-.rec-card.good{background:var(--green-dim);border-color:var(--green-border)}
-.rec-icon{font-size:24px;margin-bottom:12px;display:block}
-.rec-header{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:10px}
-.rec-title{font-size:14px;font-weight:600;line-height:1.3}
-.rec-desc{font-size:13px;color:var(--fg-2);line-height:1.6;margin-bottom:12px}
-.rec-action{font-size:12px;color:var(--fg-3);padding:8px 10px;
-  background:rgba(0,0,0,.15);border-radius:6px;line-height:1.5}
-[data-theme="light"] .rec-action{background:rgba(0,0,0,.04)}
-/* ─ SAVINGS BOX ─────────────────────────── */
-.savings-box{margin-top:16px;padding:14px 16px;border-radius:var(--radius);
-  background:var(--green-dim);border:1px solid var(--green-border)}
-.savings-title{font-size:13px;font-weight:600;color:var(--green);margin-bottom:4px}
-.savings-sub{font-size:12px;color:var(--fg-3)}
-/* ─ EMPTY STATE ──────────────────────────── */
-.empty{padding:48px 24px;text-align:center;color:var(--fg-3);font-size:13px}
-.empty-icon{font-size:32px;margin-bottom:12px}
-/* ─ FOOTER ───────────────────────────────── */
-.footer{padding:32px 24px;text-align:center;font-size:12px;color:var(--fg-3);
-  border-top:1px solid var(--border)}
-.footer a{color:var(--accent)}
-.footer a:hover{text-decoration:underline}
-/* ─ SCROLLBAR ────────────────────────────── */
-::-webkit-scrollbar{width:6px;height:6px}
+.cluster-text{font-size:13px;color:var(--fg-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cluster-footer{
+  padding:13px 18px;border-top:1px solid var(--border);
+  font-size:12px;color:var(--fg-3);background:var(--surface-2);
+  border-radius:0 0 var(--radius-lg) var(--radius-lg);
+}
+.cluster-footer code{
+  background:var(--surface-hover);border:1px solid var(--border);
+  padding:1px 6px;border-radius:4px;
+  font-family:'Fira Code',monospace;font-size:11px;
+}
+
+/* ── TEMPLATE CARDS ── */
+.template-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);
+  overflow:hidden;margin-bottom:16px;box-shadow:var(--shadow);
+}
+.template-card-header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:13px 18px;background:var(--surface-2);border-bottom:1px solid var(--border);
+}
+.template-card-title{font-size:13px;font-weight:500;color:var(--fg)}
+.template-card-meta{display:flex;align-items:center;gap:8px}
+.template-card-body{padding:16px 18px}
+.template-original{
+  font-family:'Fira Code',monospace;font-size:9px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.1em;color:var(--fg-3);margin-bottom:7px;
+}
+.template-original-text{font-size:12px;color:var(--fg-3);font-style:italic;margin-bottom:16px;line-height:1.6}
+.template-improved-label{
+  font-family:'Fira Code',monospace;font-size:9px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.1em;color:var(--brand);margin-bottom:7px;
+}
+.template-pre{
+  background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);
+  padding:14px;font-family:'Fira Code',monospace;font-size:12px;
+  color:var(--fg-2);line-height:1.7;white-space:pre-wrap;word-break:break-word;
+  position:relative;
+}
+.template-placeholder{color:var(--brand);font-weight:600}
+.copy-btn{
+  position:absolute;top:8px;right:8px;height:24px;padding:0 9px;
+  border-radius:5px;border:1px solid var(--border);background:var(--surface);
+  color:var(--fg-3);font-family:'Fira Code',monospace;font-size:10px;font-weight:600;cursor:pointer;
+  display:flex;align-items:center;gap:5px;transition:all .15s;letter-spacing:.03em;
+}
+.copy-btn:hover{border-color:var(--brand);color:var(--brand);background:var(--brand-dim)}
+.copy-btn.copied{border-color:var(--green);color:var(--green);background:var(--green-dim)}
+.template-improvements{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.improvement-tag{
+  font-family:'Fira Code',monospace;font-size:10px;font-weight:600;
+  padding:2px 8px;border-radius:4px;
+  background:var(--brand-dim);color:var(--brand);border:1px solid var(--brand-border);
+}
+
+/* ── CLAUDE.MD BUILDER ── */
+.claudemd-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);
+  overflow:hidden;margin-bottom:14px;box-shadow:var(--shadow);
+}
+.claudemd-header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:13px 18px;border-bottom:1px solid var(--border);
+  background:var(--surface-2);
+}
+.claudemd-icon-title{display:flex;align-items:center;gap:10px}
+.claudemd-type-badge{
+  font-family:'Fira Code',monospace;font-size:9px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.1em;
+  padding:2px 8px;border-radius:4px;
+}
+.claudemd-type-context {background:var(--blue-dim); color:var(--blue); border:1px solid var(--blue-border)}
+.claudemd-type-behavior{background:var(--green-dim);color:var(--green);border:1px solid var(--green-border)}
+.claudemd-type-skill   {background:var(--purple-dim);color:var(--purple);border:1px solid var(--purple-border)}
+.claudemd-type-style   {background:var(--yellow-dim);color:var(--yellow);border:1px solid var(--yellow-border)}
+.claudemd-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--fg)}
+.claudemd-body{padding:16px 18px}
+.claudemd-reason{font-size:12px;color:var(--fg-3);margin-bottom:12px;line-height:1.65}
+.claudemd-pre{
+  background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);
+  padding:14px;font-family:'Fira Code',monospace;font-size:12px;
+  color:var(--fg-2);line-height:1.7;white-space:pre-wrap;word-break:break-word;position:relative;
+}
+
+/* ── REC CARD ── */
+.rec-card{
+  border-radius:var(--radius-lg);padding:22px;border:1px solid var(--border);
+  background:var(--surface);position:relative;overflow:hidden;
+  transition:transform .2s,box-shadow .2s;
+}
+.rec-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.rec-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--rec-line,var(--border))}
+.rec-card.high  {--rec-line:var(--red);  border-color:var(--red-border)}
+.rec-card.medium{--rec-line:var(--yellow);border-color:var(--yellow-border)}
+.rec-card.low   {--rec-line:var(--blue); border-color:var(--blue-border)}
+.rec-card.good  {--rec-line:var(--green);border-color:var(--green-border)}
+.rec-icon{font-size:20px;margin-bottom:14px;display:block}
+.rec-header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
+.rec-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--fg);line-height:1.3}
+.rec-desc{font-size:13px;color:var(--fg-2);line-height:1.7;margin-bottom:14px}
+.rec-action{
+  font-family:'Fira Code',monospace;font-size:11px;font-weight:500;color:var(--brand);
+  padding:10px 12px;background:var(--brand-dim);border:1px solid var(--brand-border);
+  border-radius:var(--radius);line-height:1.6;letter-spacing:.02em;
+}
+
+/* ── SCORE DISTRIBUTION (horizontal band rows) ── */
+.score-dist-rows{display:flex;flex-direction:column;gap:12px;margin-top:4px}
+.score-dist-row{display:grid;grid-template-columns:46px 1fr 38px;align-items:center;gap:10px}
+.score-dist-range{
+  font-family:'Fira Code',monospace;font-size:9px;font-weight:600;
+  color:var(--fg-3);white-space:nowrap;letter-spacing:.03em;
+}
+.score-dist-bar-wrap{height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.score-dist-bar{height:100%;border-radius:3px;transition:width .9s cubic-bezier(.4,0,.2,1)}
+.score-dist-count{
+  font-family:'Bebas Neue',sans-serif;font-size:22px;
+  color:var(--fg-3);text-align:right;line-height:1;
+}
+.score-dist-row.active .score-dist-range{color:var(--brand)}
+.score-dist-row.active .score-dist-count{color:var(--fg)}
+
+/* ── EMPTY ── */
+.empty{padding:52px 24px;text-align:center;color:var(--fg-3)}
+.empty-icon{font-size:30px;margin-bottom:14px;opacity:.5}
+
+/* ── FOOTER ── */
+.footer{
+  padding:32px 28px;text-align:center;
+  font-family:'Fira Code',monospace;font-size:11px;color:var(--fg-3);
+  border-top:1px solid var(--border);letter-spacing:.02em;
+  position:relative;z-index:1;
+}
+.footer a{color:var(--brand);font-weight:500}
+.footer a:hover{color:var(--brand-hover)}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--fg-3)}
+
+/* ══════════════════════════════════════════════════
+   SIDEBAR LAYOUT
+══════════════════════════════════════════════════ */
+html,body{height:100%}
+
+body{
+  display:grid;
+  grid-template-rows:auto 1fr;
+  grid-template-columns:1fr;
+}
+
+/* Top strip: period + theme toggle */
+.top-strip{
+  position:sticky;top:0;z-index:300;
+  background:rgba(9,10,14,.96);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:0 20px 0 0;
+  display:flex;align-items:center;gap:0;
+  height:44px;
+  grid-row:1;grid-column:1;
+}
+[data-theme="light"] .top-strip{background:rgba(242,237,224,.96)}
+
+.top-strip-brand{
+  display:flex;align-items:center;gap:12px;
+  width:220px;flex-shrink:0;padding:0 20px;
+  border-right:1px solid var(--border);height:100%;
+}
+.ts-logo{
+  font-family:'Fira Code',monospace;font-size:11px;font-weight:600;
+  color:var(--brand);background:var(--brand-dim);
+  border:1px solid var(--brand-border);padding:3px 8px;
+  border-radius:4px;flex-shrink:0;
+}
+.ts-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--fg);letter-spacing:-.01em}
+.ts-sub{font-family:'Fira Code',monospace;font-size:9px;color:var(--fg-3);margin-top:1px;letter-spacing:.02em}
+
+.top-strip-period{
+  display:flex;align-items:center;gap:14px;flex:1;padding:0 20px;
+}
+.timerange-label{font-family:'Fira Code',monospace;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--fg-3);white-space:nowrap}
+.timerange-dates{font-family:'Fira Code',monospace;font-size:11px;font-weight:600;color:var(--brand);white-space:nowrap;min-width:200px;letter-spacing:.02em}
+.timerange-slider-wrap{flex:1;min-width:120px;max-width:360px;position:relative;height:20px;display:flex;align-items:center}
+.tr-track{position:absolute;left:0;right:0;height:2px;background:var(--border);border-radius:2px;pointer-events:none}
+.tr-fill{position:absolute;height:100%;background:var(--brand);border-radius:2px;left:0;width:100%;transition:none;box-shadow:0 0 5px rgba(245,163,0,.35)}
+.tr-thumb{position:absolute;width:100%;height:20px;top:0;left:0;background:transparent;-webkit-appearance:none;appearance:none;pointer-events:none;outline:none}
+.tr-thumb::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:var(--brand);border:2px solid var(--surface);box-shadow:0 0 0 1px var(--brand),0 0 8px rgba(245,163,0,.3);cursor:pointer;pointer-events:all;transition:transform .12s}
+.tr-thumb::-webkit-slider-thumb:hover{transform:scale(1.3)}
+.tr-thumb::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:var(--brand);border:2px solid var(--surface);cursor:pointer;pointer-events:all}
+.tr-reset{height:24px;padding:0 10px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--fg-3);font-family:'Fira Code',monospace;font-size:9px;font-weight:600;letter-spacing:.06em;cursor:pointer;white-space:nowrap;transition:all .15s}
+.tr-reset:hover{border-color:var(--brand);color:var(--brand);background:var(--brand-dim)}
+.tr-note{display:none} /* hide the note */
+
+.top-strip-right{
+  display:flex;align-items:center;gap:8px;padding-left:16px;border-left:1px solid var(--border);height:100%;
+}
+.theme-btn{
+  height:26px;padding:0 10px;border-radius:4px;
+  border:1px solid var(--border);background:transparent;color:var(--fg-2);
+  font-size:10px;font-weight:500;font-family:'Fira Code',monospace;cursor:pointer;
+  display:flex;align-items:center;gap:5px;transition:all .15s;letter-spacing:.03em;
+}
+.theme-btn:hover{border-color:var(--brand);color:var(--brand);background:var(--brand-dim)}
+.theme-btn svg{width:11px;height:11px;flex-shrink:0}
+
+/* Page body layout */
+.page-layout{
+  display:grid;
+  grid-template-columns:220px 1fr;
+  grid-row:2;
+  min-height:calc(100vh - 44px);
+}
+
+/* Sidebar */
+.sidebar{
+  position:sticky;top:44px;
+  height:calc(100vh - 44px);
+  overflow-y:auto;
+  background:var(--surface);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  z-index:150;
+  scrollbar-width:none;
+}
+.sidebar::-webkit-scrollbar{display:none}
+
+/* Sidebar nav (vertical) */
+.nav{background:none;border:none;overflow-x:visible;position:static;flex:1}
+.nav-inner{
+  display:flex;flex-direction:column;
+  padding:12px 10px;gap:1px;min-width:unset;
+}
+.nav a{
+  display:flex;align-items:center;padding:9px 12px;height:auto;
+  font-family:'Fira Code',monospace;font-size:10px;font-weight:600;letter-spacing:.06em;
+  color:var(--fg-3);white-space:nowrap;
+  border-radius:6px;margin:0;transition:all .15s;width:100%;
+  border-left:2px solid transparent;
+}
+.nav a:hover{color:var(--fg);background:var(--surface-hover)}
+.nav a.active{color:var(--brand);background:var(--brand-dim);border-left-color:var(--brand);font-weight:600}
+
+/* Sidebar section label */
+.sidebar-section-label{
+  font-family:'Fira Code',monospace;font-size:9px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.12em;color:var(--fg-3);
+  padding:16px 14px 6px;
+}
+
+/* Sidebar footer */
+.sidebar-foot{
+  padding:16px 14px;border-top:1px solid var(--border);margin-top:auto;
+}
+.sidebar-foot-ts{font-family:'Fira Code',monospace;font-size:9px;color:var(--fg-3);letter-spacing:.02em;margin-top:6px}
+
+/* Page main */
+.page-main{
+  overflow:hidden;min-width:0;
+  display:flex;flex-direction:column;
+}
+
+/* ── CONTENT SECTIONS (full-width, no max-width) ── */
+.wrap{max-width:none;margin:0;padding:0 40px}
+section{padding:52px 0}
+section+section{border-top:1px solid var(--border)}
+
+/* Section heading: numbered, bold, minimal */
+.section-num{
+  font-family:'Fira Code',monospace;font-size:9px;font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--fg-3);
+  margin-bottom:4px;display:flex;align-items:center;gap:10px;
+}
+.section-num::after{content:'';flex:0 0 24px;height:1px;background:var(--border)}
+.section-heading{
+  font-family:'Syne',sans-serif;font-size:32px;font-weight:800;
+  color:var(--fg);margin-bottom:0;letter-spacing:-.03em;line-height:1.1;
+}
+.section-desc{font-size:13px;color:var(--fg-3);margin-bottom:32px;margin-top:8px;line-height:1.65;max-width:560px}
+.section-eyebrow{display:none} /* replaced by section-num */
+
+/* ── STAT STRIP ── */
+.stat-strip{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  border:1px solid var(--border);border-radius:var(--radius-lg);
+  overflow:hidden;background:var(--surface);box-shadow:var(--shadow);
+  margin-bottom:24px;
+}
+.stat-card{
+  padding:20px 20px 18px;border-right:1px solid var(--border);
+  position:relative;overflow:hidden;
+  transition:background .2s;
+  animation:none; /* override old stagger */
+  background:var(--surface);box-shadow:none;border-radius:0;
+  border-top:none;
+}
+.stat-card::after{
+  content:'';position:absolute;bottom:0;left:20px;right:20px;height:1px;
+  background:var(--card-accent,transparent);
+}
+.stat-card:last-child{border-right:none}
+.stat-card:hover{background:var(--surface-hover)}
+.stat-card.green {--card-accent:var(--green)}
+.stat-card.yellow{--card-accent:var(--yellow)}
+.stat-card.red   {--card-accent:var(--red)}
+.stat-card.orange{--card-accent:var(--orange)}
+.stat-card.blue  {--card-accent:var(--blue)}
+.stat-card.brand {--card-accent:var(--brand)}
+.stat-card.purple{--card-accent:var(--purple)}
+.stat-label{font-family:'Fira Code',monospace;font-size:8px;font-weight:600;color:var(--fg-3);text-transform:uppercase;letter-spacing:.14em;margin-bottom:10px}
+.stat-value{font-family:'Bebas Neue',sans-serif;font-size:40px;font-weight:400;line-height:.9;letter-spacing:.01em;color:var(--fg);margin-bottom:8px}
+.stat-sub{font-size:11px;color:var(--fg-3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ── SCORE DISPLAY (text-based, no gauge) ── */
+.score-wall{
+  display:grid;grid-template-columns:auto 1fr;gap:0;
+  border:1px solid var(--border);border-radius:var(--radius-xl);
+  overflow:hidden;background:var(--surface);box-shadow:var(--shadow);
+  margin-bottom:24px;
+}
+.score-left{
+  padding:40px 48px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;
+  border-right:1px solid var(--border);
+  background:var(--surface-2);
+  min-width:220px;
+}
+.score-big-grade{
+  font-family:'Bebas Neue',sans-serif;font-size:140px;line-height:1;
+  letter-spacing:-.01em;
+  animation:fadeUp .5s .1s both;
+}
+.score-big-num{
+  font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:.02em;
+  color:var(--fg-3);line-height:1;margin-top:4px;
+}
+.score-big-num span{font-size:22px;opacity:.5}
+.score-big-label{font-family:'Fira Code',monospace;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--fg-3);margin-top:10px}
+.score-verdict-blurb{font-size:12px;color:var(--fg-3);margin-top:8px;max-width:160px;line-height:1.6}
+
+.score-right{
+  display:grid;grid-template-columns:1fr auto;gap:0;
+}
+.score-dims{padding:32px 36px;border-right:1px solid var(--border)}
+.score-hist-col{padding:32px 28px;min-width:200px}
+
+/* Override old gauge classes (not used, but keep for safety) */
+.score-gauge-wrap{display:none}
+.score-ring-outer{display:none}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1100px){
+  .stat-strip{grid-template-columns:repeat(3,1fr)}
+  .stat-card:nth-child(3){border-right:none}
+  .stat-card:nth-child(3),.stat-card:nth-child(4),.stat-card:nth-child(5),.stat-card:nth-child(6){border-top:1px solid var(--border)}
+}
+@media(max-width:900px){
+  .page-layout{grid-template-columns:1fr}
+  .sidebar{display:none}
+}
+@media(max-width:700px){
+  .stat-strip{grid-template-columns:repeat(2,1fr)}
+  .top-strip-brand{width:auto}
+  .score-wall{grid-template-columns:1fr}
+  .score-left{border-right:none;border-bottom:1px solid var(--border);min-width:0;flex-direction:row;align-items:center;gap:32px;padding:24px 28px}
+  .score-right{grid-template-columns:1fr}
+  .score-hist-col{border-top:1px solid var(--border);border-left:none}
+}
+
+/* ── HORIZONTAL NAV (overrides sidebar layout) ── */
+html,body{height:auto!important}
+body{display:block!important}
+
+/* Offset anchor-scroll target below sticky top-strip (44px) + horiz-nav (40px) */
+section[id]{scroll-margin-top:90px}
+
+.horiz-nav{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  overflow-x:auto;scrollbar-width:none;
+  position:sticky;top:44px;z-index:200;
+}
+.horiz-nav::-webkit-scrollbar{display:none}
+.horiz-nav .nav-inner{
+  display:flex;padding:0 20px;gap:2px;min-width:max-content;flex-direction:row;
+}
+.horiz-nav a{
+  display:inline-flex;align-items:center;padding:0 14px;height:40px;
+  font-family:'Fira Code',monospace;font-size:10px;font-weight:600;letter-spacing:.06em;
+  color:var(--fg-3);white-space:nowrap;
+  border-radius:6px;margin:4px 0;transition:all .15s;
+  border-left:none;
+}
+.horiz-nav a:hover{color:var(--fg);background:var(--surface-hover)}
+.horiz-nav a.active{color:var(--brand);background:var(--brand-dim);font-weight:600}
+
+/* ── INTERACTION MODAL ── */
+.modal-overlay{
+  position:fixed;inset:0;z-index:2000;
+  background:rgba(0,0,0,.72);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+  display:flex;align-items:center;justify-content:center;padding:24px;
+  opacity:0;pointer-events:none;transition:opacity .2s ease;
+}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-xl);width:100%;max-width:740px;max-height:82vh;
+  display:flex;flex-direction:column;box-shadow:var(--shadow-lg);
+  transform:translateY(20px);transition:transform .22s cubic-bezier(.4,0,.2,1);
+}
+.modal-overlay.open .modal-card{transform:translateY(0)}
+.modal-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 26px;border-bottom:1px solid var(--border);flex-shrink:0;
+}
+.modal-title{display:flex;align-items:center;gap:12px}
+.modal-title-icon{font-size:22px;line-height:1}
+.modal-title-text{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--fg);letter-spacing:-.02em}
+.modal-title-count{
+  font-family:'Fira Code',monospace;font-size:10px;font-weight:600;
+  padding:2px 9px;border-radius:4px;
+  background:var(--brand-dim);color:var(--brand);border:1px solid var(--brand-border);
+}
+.modal-close{
+  width:30px;height:30px;border-radius:6px;border:1px solid var(--border);
+  background:transparent;color:var(--fg-3);cursor:pointer;font-size:14px;
+  display:flex;align-items:center;justify-content:center;transition:all .15s;
+}
+.modal-close:hover{border-color:var(--brand);color:var(--brand);background:var(--brand-dim)}
+.modal-desc{
+  padding:10px 26px 12px;font-size:12px;color:var(--fg-3);
+  border-bottom:1px solid var(--border-subtle);flex-shrink:0;
+}
+.modal-body{overflow-y:auto;padding:18px 26px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin}
+.modal-prompt-item{
+  background:var(--surface-2);border:1px solid var(--border);
+  border-radius:var(--radius);padding:13px 16px;
+}
+.modal-prompt-num{
+  font-family:'Fira Code',monospace;font-size:9px;font-weight:600;
+  color:var(--fg-3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:7px;
+}
+.modal-prompt-text{font-size:13px;color:var(--fg-2);line-height:1.7;white-space:pre-wrap;word-break:break-word}
+.modal-empty{padding:40px;text-align:center;color:var(--fg-3);font-size:13px}
+.pattern-chip{cursor:pointer}
 </style>
 </head>
 <body>
 
-<header class="header">
-  <div class="header-brand">
-    <div class="logo">C</div>
-    <div class="brand-text">
-      <h1>Prompt Analysis</h1>
-      <p id="gen-ts">Claude Code Session Report</p>
+<!-- TOP STRIP: brand + period controls + theme toggle -->
+<div class="top-strip">
+  <div class="top-strip-brand">
+    <div class="ts-logo">&gt;_</div>
+    <div>
+      <div class="ts-name">Prompt Analysis</div>
+      <div class="ts-sub" id="gen-ts">Claude Code Report</div>
     </div>
   </div>
-  <div class="header-actions">
-    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+  <div class="top-strip-period" id="timerange">
+    <span class="timerange-label">Period</span>
+    <span class="timerange-dates" id="tr-label">All time</span>
+    <div class="timerange-slider-wrap" id="tr-slider-wrap">
+      <div class="tr-track"><div class="tr-fill" id="tr-fill"></div></div>
+      <input type="range" class="tr-thumb" id="tr-start" min="0" max="100" value="0" style="z-index:3">
+      <input type="range" class="tr-thumb" id="tr-end" min="0" max="100" value="100" style="z-index:4">
+    </div>
+    <button class="tr-reset" id="tr-reset">All time</button>
+  </div>
+  <div class="top-strip-right">
+    <button class="theme-btn" onclick="toggleTheme()" aria-label="Toggle theme">
       <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
-        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-        <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
-        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
       </svg>
-      <span id="theme-label">Light</span>
+      <span id="theme-label">Dark</span>
     </button>
   </div>
-</header>
+</div>
 
-<nav class="nav" id="main-nav">
+<!-- HORIZONTAL NAV -->
+<nav class="horiz-nav" id="main-nav">
   <div class="nav-inner">
     <a href="#overview">Overview</a>
+    <a href="#prompting">Prompting Score</a>
     <a href="#tokens">Token Usage</a>
     <a href="#cache">Cache</a>
     <a href="#cost">Cost</a>
-    <a href="#verbosity">Verbosity</a>
     <a href="#patterns">Patterns</a>
     <a href="#insights">Insights</a>
   </div>
 </nav>
 
 <main>
-<!-- ─────────────────────────────────────────
-     1. OVERVIEW
-───────────────────────────────────────────── -->
+
+<!-- 1. OVERVIEW -->
 <section id="overview">
   <div class="wrap">
-    <div class="section-kicker">Overview</div>
-    <div class="section-title">Executive Summary</div>
-    <div class="grid-6" id="stat-cards"></div>
-    <div class="card" style="margin-top:16px">
+    <div class="section-num">01 — Overview</div>
+    <h2 class="section-heading">Session Summary</h2>
+    <p class="section-desc" id="overview-desc">A snapshot of your Claude Code usage, token efficiency, and estimated cost.</p>
+    <div class="stat-strip" id="stat-cards"></div>
+    <div class="card" style="margin-top:20px">
       <div class="card-pad">
         <div class="card-title">Token Composition</div>
         <div id="token-comp"></div>
@@ -244,13 +956,22 @@ tbody tr:hover td{background:var(--surface-hover)}
   </div>
 </section>
 
-<!-- ─────────────────────────────────────────
-     2. TOKEN USAGE
-───────────────────────────────────────────── -->
+<!-- 2. PROMPTING SCORE -->
+<section id="prompting">
+  <div class="wrap">
+    <div class="section-num">02 — Quality</div>
+    <h2 class="section-heading">Prompting Score</h2>
+    <p class="section-desc">How well your prompts follow <a href="https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices" target="_blank" style="color:var(--brand);font-weight:500">Claude's prompting best practices</a> — directness, context, examples, structure, and output specification.</p>
+    <div id="prompting-content"></div>
+  </div>
+</section>
+
+<!-- 3. TOKEN USAGE -->
 <section id="tokens">
   <div class="wrap">
-    <div class="section-kicker">Usage</div>
-    <div class="section-title">Token Usage Over Time</div>
+    <div class="section-num">03 — Usage</div>
+    <h2 class="section-heading">Token Usage Over Time</h2>
+    <p class="section-desc">Daily breakdown of input, output, and cache tokens across all sessions.</p>
     <div class="card">
       <div class="card-pad">
         <div class="chart-box" style="height:300px"><canvas id="tokenChart"></canvas></div>
@@ -259,13 +980,12 @@ tbody tr:hover td{background:var(--surface-hover)}
   </div>
 </section>
 
-<!-- ─────────────────────────────────────────
-     3. CACHE
-───────────────────────────────────────────── -->
+<!-- 4. CACHE -->
 <section id="cache">
   <div class="wrap">
-    <div class="section-kicker">Efficiency</div>
-    <div class="section-title">Cache Performance</div>
+    <div class="section-num">04 — Efficiency</div>
+    <h2 class="section-heading">Cache Performance</h2>
+    <p class="section-desc">How effectively your context is being reused to reduce token spend.</p>
     <div class="grid-2">
       <div class="card">
         <div class="card-pad">
@@ -290,13 +1010,12 @@ tbody tr:hover td{background:var(--surface-hover)}
   </div>
 </section>
 
-<!-- ─────────────────────────────────────────
-     4. COST
-───────────────────────────────────────────── -->
+<!-- 5. COST -->
 <section id="cost">
   <div class="wrap">
-    <div class="section-kicker">Spend</div>
-    <div class="section-title">Cost Breakdown</div>
+    <div class="section-num">05 — Spend</div>
+    <h2 class="section-heading">Cost Breakdown</h2>
+    <p class="section-desc">Estimated spend by day and model based on token usage.</p>
     <div class="grid-2">
       <div class="card">
         <div class="card-pad">
@@ -314,147 +1033,371 @@ tbody tr:hover td{background:var(--surface-hover)}
   </div>
 </section>
 
-<!-- ─────────────────────────────────────────
-     5. VERBOSITY
-───────────────────────────────────────────── -->
-<section id="verbosity">
-  <div class="wrap">
-    <div class="section-kicker">Efficiency</div>
-    <div class="section-title">Prompt Verbosity</div>
-    <div class="grid-2">
-      <div class="card">
-        <div class="card-pad">
-          <div class="card-title">Prompt Length Distribution</div>
-          <div class="chart-box" style="height:240px"><canvas id="lenChart"></canvas></div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-pad">
-          <div class="card-title">Verbosity Metrics</div>
-          <div class="metric-rows" id="verb-metrics"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ─────────────────────────────────────────
-     6. PATTERNS
-───────────────────────────────────────────── -->
+<!-- 6. PATTERNS -->
 <section id="patterns">
   <div class="wrap">
-    <div class="section-kicker">Patterns</div>
-    <div class="section-title">Repeated Prompt Patterns</div>
-    <div class="card" id="cluster-card"></div>
+    <div class="section-num">06 — Patterns</div>
+    <h2 class="section-heading">Usage Patterns &amp; Templates</h2>
+    <p class="section-desc">How you interact with Claude Code, repeated workflows, and reusable prompt templates.</p>
+
+    <!-- Interaction patterns -->
+    <div style="margin-bottom:32px">
+      <div class="card-title" style="margin-bottom:16px">Interaction Style</div>
+      <div class="pattern-chips" id="interaction-chips"></div>
+    </div>
+
+    <!-- Repeated clusters -->
+    <div style="margin-bottom:32px">
+      <div class="card-title" style="margin-bottom:16px">Repeated Prompt Clusters</div>
+      <div class="card" id="cluster-card"></div>
+    </div>
+
+    <!-- Templates -->
+    <div id="templates-section"></div>
   </div>
 </section>
 
-<!-- ─────────────────────────────────────────
-     7. INSIGHTS
-───────────────────────────────────────────── -->
+<!-- 7. INSIGHTS -->
 <section id="insights">
   <div class="wrap">
-    <div class="section-kicker">Insights</div>
-    <div class="section-title">Improvement Recommendations</div>
-    <div class="grid-2" id="recs-grid"></div>
+    <div class="section-num">07 — Insights</div>
+    <h2 class="section-heading">Recommendations &amp; CLAUDE.md Builder</h2>
+    <p class="section-desc">Actionable steps to reduce cost, improve efficiency, and optimise your prompting workflow.</p>
+
+    <div style="margin-bottom:40px">
+      <div class="grid-2" id="recs-grid"></div>
+    </div>
+
+    <div id="claudemd-section"></div>
   </div>
 </section>
+
 </main>
 
 <footer class="footer">
-  Generated by <a href="https://github.com/ravipatel/prompt-analyzer" target="_blank">@ravipatel/prompt-analyzer</a>
+  Generated by <a href="https://github.com/ravipatel7/prompt-analyzer" target="_blank">@ravilabs/prompt-analyser</a>
   &nbsp;·&nbsp; <span id="footer-ts"></span>
 </footer>
 
+<!-- INTERACTION PROMPT MODAL -->
+<div class="modal-overlay" id="ip-modal" onclick="closeIpModal(event)">
+  <div class="modal-card">
+    <div class="modal-header">
+      <div class="modal-title">
+        <span class="modal-title-icon" id="ip-modal-icon"></span>
+        <span class="modal-title-text" id="ip-modal-label"></span>
+        <span class="modal-title-count" id="ip-modal-count"></span>
+      </div>
+      <button class="modal-close" onclick="closeIpModal()" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-desc" id="ip-modal-desc"></div>
+    <div class="modal-body" id="ip-modal-body"></div>
+  </div>
+</div>
+
 <script>
-// ─── DATA (base64-encoded JSON, immune to HTML injection) ─────────────────────
 const D = JSON.parse(atob("{{REPORT_DATA_B64}}"));
 const GENERATED_AT = "{{GENERATED_AT}}";
 
-// ─── THEME ────────────────────────────────────────────────────────────────────
+// ── Theme ────────────────────────────────────────────────────────────────────
 (function(){
   const saved = localStorage.getItem('pa-theme');
   if(saved) document.documentElement.setAttribute('data-theme', saved);
-  else if(window.matchMedia && !window.matchMedia('(prefers-color-scheme: dark)').matches)
-    document.documentElement.setAttribute('data-theme','light');
+  else if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+    document.documentElement.setAttribute('data-theme','dark');
 })();
 
 function toggleTheme(){
-  const t = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', t);
-  localStorage.setItem('pa-theme', t);
-  updateThemeBtn(t);
+  const next = document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',next);
+  localStorage.setItem('pa-theme',next);
+  updateThemeBtn(next);
 }
 function updateThemeBtn(t){
-  const lbl = document.getElementById('theme-label');
-  if(lbl) lbl.textContent = t === 'dark' ? 'Light' : 'Dark';
+  const lbl=document.getElementById('theme-label');
+  const icon=document.getElementById('theme-icon');
+  if(lbl) lbl.textContent = t==='dark'?'Light':'Dark';
+  if(icon){
+    icon.innerHTML = t==='dark'
+      ? '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>'
+      : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+  }
 }
 updateThemeBtn(document.documentElement.getAttribute('data-theme'));
 
-// ─── FORMATTERS ───────────────────────────────────────────────────────────────
+// ── Formatters ───────────────────────────────────────────────────────────────
 const F = {
-  n: v => v >= 1e9 ? (v/1e9).toFixed(2)+'B' : v >= 1e6 ? (v/1e6).toFixed(1)+'M' : v >= 1e3 ? (v/1e3).toFixed(1)+'K' : Math.round(v).toString(),
-  usd:  v => '$' + (+v).toFixed(2),
-  usd4: v => '$' + (+v).toFixed(4),
+  n: v => v>=1e9?(v/1e9).toFixed(2)+'B':v>=1e6?(v/1e6).toFixed(1)+'M':v>=1e3?(v/1e3).toFixed(1)+'K':Math.round(v).toString(),
+  usd:  v => '$'+(+v).toFixed(2),
+  usd4: v => '$'+(+v).toFixed(4),
   pct:  v => (v*100).toFixed(1)+'%',
   date: iso => iso ? new Date(iso).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '—',
   sdate: iso => iso ? new Date(iso).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '',
 };
-
 function css(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-// ─── CHART DEFAULTS ───────────────────────────────────────────────────────────
+// ── Chart instances (for time-range updates) ──────────────────────────────────
+const charts = {};
+
 function chartDefaults(){
   Chart.defaults.color = css('--fg-3');
   Chart.defaults.borderColor = css('--border-subtle');
-  Chart.defaults.font.family = "'JetBrains Mono', monospace";
+  Chart.defaults.font.family = "'Fira Code', monospace";
   Chart.defaults.font.size = 11;
   Chart.defaults.plugins.legend.labels.boxWidth = 10;
+  Chart.defaults.plugins.legend.labels.boxHeight = 10;
   Chart.defaults.plugins.legend.labels.padding = 16;
-  Chart.defaults.plugins.tooltip.backgroundColor = css('--surface-2');
+  Chart.defaults.plugins.tooltip.backgroundColor = css('--surface');
   Chart.defaults.plugins.tooltip.borderColor = css('--border');
   Chart.defaults.plugins.tooltip.borderWidth = 1;
   Chart.defaults.plugins.tooltip.titleColor = css('--fg');
   Chart.defaults.plugins.tooltip.bodyColor = css('--fg-2');
-  Chart.defaults.plugins.tooltip.padding = 10;
+  Chart.defaults.plugins.tooltip.padding = 12;
+  Chart.defaults.plugins.tooltip.cornerRadius = 8;
+  Chart.defaults.plugins.tooltip.boxPadding = 4;
 }
 
-// ─── 1. OVERVIEW ──────────────────────────────────────────────────────────────
-function renderOverview(){
-  const s = D.summary, c = D.cacheMetrics, t = D.tokens;
-  const d1 = F.date(s.dateRange.first), d2 = F.date(s.dateRange.last);
-  const hitPct = c.hitPercent || 0;
-  const cacheClass = hitPct >= 70 ? 'green' : hitPct >= 40 ? 'yellow' : 'red';
-  const cacheValClass = hitPct >= 70 ? 'green' : hitPct >= 40 ? 'yellow' : 'red';
-  const cacheStatus = hitPct >= 70 ? 'Excellent' : hitPct >= 40 ? 'Needs work' : 'Poor — act now';
+// ── Time range state ─────────────────────────────────────────────────────────
+let currentDateSlice = D.byDate || [];
+
+function computeSliceStats(slice){
+  const totInput    = slice.reduce((s,d)=>s+d.inputTokens,0);
+  const totCreate   = slice.reduce((s,d)=>s+d.cacheCreation,0);
+  const totRead     = slice.reduce((s,d)=>s+d.cacheRead,0);
+  const totOutput   = slice.reduce((s,d)=>s+d.outputTokens,0);
+  const totCost     = slice.reduce((s,d)=>s+d.cost,0);
+  const totPrompts  = slice.reduce((s,d)=>s+(d.userPromptCount||0),0);
+  const totSessions = slice.reduce((s,d)=>s+(d.sessionCount||0),0);
+  const effInput    = totInput + totCreate + totRead;
+  const hitPct      = effInput>0 ? Math.round(totRead/effInput*100) : 0;
+  const savings     = D.summary && D.summary.totalCost > 0
+    ? totCost * (D.summary.cacheSavingsUSD / (D.summary.totalCost + D.summary.cacheSavingsUSD) || 0) : 0;
+  return { totInput, totCreate, totRead, totOutput, totCost, totPrompts, totSessions, effInput, hitPct };
+}
+
+// ── Time Range Picker ─────────────────────────────────────────────────────────
+function initTimeRange(){
+  const byDate = D.byDate || [];
+  if(byDate.length < 2){ document.getElementById('timerange').style.display='none'; return; }
+
+  const n = byDate.length;
+  const trStart = document.getElementById('tr-start');
+  const trEnd   = document.getElementById('tr-end');
+  const trFill  = document.getElementById('tr-fill');
+  const trLabel = document.getElementById('tr-label');
+
+  trStart.max = trEnd.max = n-1;
+  trEnd.value = n-1;
+
+  function updateFill(){
+    const s = +trStart.value, e = +trEnd.value;
+    const frac = 1 / (n-1);
+    trFill.style.left  = (Math.min(s,e) * frac * 100) + '%';
+    trFill.style.width = (Math.abs(e-s) * frac * 100) + '%';
+  }
+
+  function applyRange(){
+    let s = +trStart.value, e = +trEnd.value;
+    if(s > e){ [s,e] = [e,s]; }
+    updateFill();
+
+    const sd = byDate[s].date, ed = byDate[e].date;
+    const all = s===0 && e===n-1;
+    trLabel.textContent = all
+      ? 'All time'
+      : F.date(sd+'T12:00:00Z') + ' → ' + F.date(ed+'T12:00:00Z');
+
+    currentDateSlice = byDate.slice(s, e+1);
+    refreshDynamicSections();
+  }
+
+  trStart.addEventListener('input', applyRange);
+  trEnd.addEventListener('input', applyRange);
+  document.getElementById('tr-reset').addEventListener('click', ()=>{
+    trStart.value = 0; trEnd.value = n-1; applyRange();
+  });
+
+  updateFill();
+  trLabel.textContent = 'All time';
+}
+
+// ── Compute prompting score from a byDate slice ───────────────────────────────
+function computePromptScoreForSlice(slice){
+  let count=0, scoreSum=0, lengthSum=0, longCount=0;
+  const dimSums = { directness:0, context:0, examples:0, structure:0, outputSpec:0 };
+  const hist = [0,0,0,0,0];
+
+  for(const d of slice){
+    const psd = d.promptScoreData;
+    if(!psd) continue;
+    count       += psd.count;
+    scoreSum    += psd.scoreSum;
+    lengthSum   += psd.lengthSum  || 0;
+    longCount   += psd.longCount  || 0;
+    dimSums.directness  += psd.directness;
+    dimSums.context     += psd.context;
+    dimSums.examples    += psd.examples;
+    dimSums.structure   += psd.structure;
+    dimSums.outputSpec  += psd.outputSpec;
+    for(let i=0;i<5;i++) hist[i] += psd.hist[i];
+  }
+
+  if(count === 0) return null;
+
+  const avg = Math.round(scoreSum / count);
+  const base = avg>=70?'A':avg>=50?'B':avg>=30?'C':avg>=15?'D':'F';
+  const mod = avg%15;
+  const sfx = base==='F'?'':mod>=11?'+':mod<=4?'−':'';
+
+  const dimDefs = [
+    {key:'directness', label:'Directness', tip:'Starts with action verb, specific ask',        max:25},
+    {key:'context',    label:'Context',    tip:'Background / motivation provided',              max:20},
+    {key:'examples',   label:'Examples',   tip:'Few-shot samples, code blocks',                max:15},
+    {key:'structure',  label:'Structure',  tip:'XML tags, numbered / bullet lists',            max:20},
+    {key:'outputSpec', label:'Output Spec',tip:'Format, constraints, completion criteria',     max:20},
+  ];
+
+  const dimensions = dimDefs.map(d=>({
+    ...d,
+    score: Math.round(dimSums[d.key]/count),
+    pct:   Math.round(dimSums[d.key]/count/d.max*100),
+  }));
+
+  const histLabels = ['0–20','21–40','41–60','61–80','81–100'];
+  const histogram  = hist.map((c,i)=>({range:histLabels[i], count:c}));
+
+  // Reuse all-time examples (not filterable without storing per-prompt timestamps in frontend)
+  const ps0 = D.promptingScore || {};
+  return { avgScore:avg, grade:base+sfx, counted:count, histogram, dimensions,
+           avgPromptLength: count>0 ? Math.round(lengthSum/count) : 0,
+           longPromptCount: longCount,
+           topExamples: ps0.topExamples||[], weakExamples: ps0.weakExamples||[] };
+}
+
+// ── Slice aggregation helpers ─────────────────────────────────────────────────
+function computeSliceByModel(slice){
+  const models = {};
+  for(const d of slice){
+    if(!d.modelData) continue;
+    for(const [model, md] of Object.entries(d.modelData)){
+      if(!models[model]) models[model] = {model, inputTokens:0, cacheCreation:0, cacheRead:0, outputTokens:0, cost:0, uncachedCost:0, messageCount:0};
+      models[model].inputTokens   += md.inputTokens;
+      models[model].cacheCreation += md.cacheCreation;
+      models[model].cacheRead     += md.cacheRead;
+      models[model].outputTokens  += md.outputTokens;
+      models[model].cost          += md.cost;
+      models[model].uncachedCost  += md.uncachedCost || 0;
+      models[model].messageCount  += md.messageCount;
+    }
+  }
+  return Object.values(models).sort((a,b)=>b.cost-a.cost);
+}
+
+function computeSliceInteractionPatterns(slice){
+  const counts = {directive:0, question:0, continuation:0, formatChange:0, clarification:0, interruption:0};
+  for(const d of slice){
+    if(!d.interactionCounts) continue;
+    for(const [k,v] of Object.entries(d.interactionCounts)) counts[k] = (counts[k]||0) + v;
+  }
+  return counts;
+}
+
+// ── Refresh dynamic sections ─────────────────────────────────────────────────
+function refreshDynamicSections(){
+  const slice = currentDateSlice;
+  const stats = computeSliceStats(slice);
+  const isFiltered = slice.length < (D.byDate||[]).length;
+
+  // Update stat cards
+  renderStatCards(stats, isFiltered);
+
+  // Update token composition bar
+  renderTokenComp({ totalCacheRead: stats.totRead, totalCacheCreation: stats.totCreate,
+                    totalInput: stats.totInput, totalOutput: stats.totOutput,
+                    totalEffectiveInput: stats.effInput });
+
+  // Update prompting score
+  const slicePs = computePromptScoreForSlice(slice);
+  if(slicePs) renderPromptingScore(slicePs);
+
+  // Update model-dependent sections
+  const sliceByModel = computeSliceByModel(slice);
+  refreshCacheSection(sliceByModel);
+  refreshCostModelTable(sliceByModel);
+
+  // Update interaction patterns
+  const sliceIp = computeSliceInteractionPatterns(slice);
+  renderInteractionPatterns(sliceIp);
+
+  // Update charts
+  const labels = slice.map(d=>F.sdate(d.date+'T12:00:00Z'));
+  if(charts.token){
+    charts.token.data.labels = labels;
+    charts.token.data.datasets[0].data = slice.map(d=>d.cacheRead);
+    charts.token.data.datasets[1].data = slice.map(d=>d.cacheCreation);
+    charts.token.data.datasets[2].data = slice.map(d=>d.inputTokens);
+    charts.token.data.datasets[3].data = slice.map(d=>d.outputTokens);
+    charts.token.update('none');
+  }
+  if(charts.cost){
+    charts.cost.data.labels = labels;
+    charts.cost.data.datasets[0].data = slice.map(d=>d.cost);
+    charts.cost.update('none');
+  }
+}
+
+// ── 1. Overview ───────────────────────────────────────────────────────────────
+function renderStatCards(stats, isFiltered){
+  const s = D.summary;
+  // Use the filtered prompting score if available, fall back to all-time
+  const ps = isFiltered ? computePromptScoreForSlice(currentDateSlice) : D.promptingScore;
+  const sessions = isFiltered ? stats.totSessions || 0 : s.totalSessions;
+  const prompts  = isFiltered ? stats.totPrompts || 0  : s.totalUserPrompts;
+  const cost     = isFiltered ? stats.totCost           : s.totalCost;
+  const hitPct   = isFiltered ? stats.hitPct            : (D.cacheMetrics && D.cacheMetrics.hitPercent || 0);
+  // Approximate savings for filtered window using the overall per-token savings rate
+  const totalRead = D.tokens && D.tokens.totalCacheRead || 1;
+  const savingsRate = totalRead > 0 ? (s.cacheSavingsUSD || 0) / totalRead : 0;
+  const savings  = isFiltered ? (stats.totRead * savingsRate) : s.cacheSavingsUSD;
+  const d1 = F.date(s.dateRange && s.dateRange.first);
+  const d2 = F.date(s.dateRange && s.dateRange.last);
+
+  const cacheClass = hitPct>=70?'green':hitPct>=40?'yellow':'red';
+  const cacheValCls = hitPct>=70?'green':hitPct>=40?'yellow':'red';
+  const cacheStatus = hitPct>=70?'Excellent':hitPct>=40?'Moderate':'Needs improvement';
+
+  let gradeColor = 'brand';
+  if(ps){ const g=ps.grade[0]; gradeColor = g==='A'?'green':g==='B'?'blue':g==='C'?'brand':g==='D'?'orange':'red'; }
 
   const cards = [
-    {cls:'',label:'Sessions',val:s.totalSessions.toLocaleString(),valCls:'',sub:`${d1} → ${d2}`},
-    {cls:'',label:'Human Prompts',val:s.totalUserPrompts.toLocaleString(),valCls:'',sub:`${s.totalAssistantMessages.toLocaleString()} assistant turns`},
-    {cls:'orange',label:'Estimated Cost',val:F.usd(s.totalCost),valCls:'accent',sub:'Actual billed (est.)'},
-    {cls:cacheClass,label:'Cache Hit Rate',val:hitPct+'%',valCls:cacheValClass,sub:cacheStatus},
-    {cls:'green',label:'Cache Savings',val:F.usd(s.cacheSavingsUSD),valCls:'green',sub:'vs uncached cost'},
-    {cls:'',label:'Models Used',val:String(s.modelsUsed.length),valCls:'',sub:s.modelsUsed.map(m=>m.replace('claude-','')).join(', ')},
+    {cls:'',      label:'Sessions',       val:sessions.toLocaleString(),  valCls:'',            sub: isFiltered?'Selected period':`${d1} → ${d2}`},
+    {cls:'',      label:'Human Prompts',  val:prompts.toLocaleString(),   valCls:'',            sub:`${(s.totalAssistantMessages||0).toLocaleString()} assistant turns`},
+    {cls:'brand', label:'Estimated Cost', val:F.usd(cost),               valCls:'accent',       sub:'Actual billed (est.)'},
+    {cls:cacheClass,label:'Cache Hit',    val:hitPct+'%',                valCls:cacheValCls,    sub:cacheStatus},
+    {cls:'green', label:'Cache Savings',  val:F.usd(savings),            valCls:'green',        sub:'vs uncached cost'},
+    ps
+      ? {cls:gradeColor, label:'Prompting Score', val:`${ps.grade}`, valCls:gradeColor, sub:`${ps.avgScore}/100 · ${ps.counted} prompts`}
+      : {cls:'',label:'Models Used',val:String((s.modelsUsed||[]).length),valCls:'',sub:(s.modelsUsed||[]).map(m=>m.replace('claude-','')).join(', ')},
   ];
 
   document.getElementById('stat-cards').innerHTML = cards.map(c=>`
     <div class="stat-card ${c.cls}">
       <div class="stat-label">${c.label}</div>
-      <div class="stat-value ${c.valCls}">${c.val}</div>
-      <div class="stat-sub" title="${c.sub}">${c.sub}</div>
+      <div class="stat-value ${c.valCls}">${esc(String(c.val))}</div>
+      <div class="stat-sub" title="${esc(c.sub)}">${esc(c.sub)}</div>
     </div>`).join('');
+}
 
-  // Token composition bar
+function renderTokenComp(t){
   const total = (t.totalEffectiveInput + t.totalOutput) || 1;
   const segs = [
-    {label:'Cache Read',    n:t.totalCacheRead,     color:'#22c55e'},
-    {label:'Cache Write',   n:t.totalCacheCreation, color:'#f59e0b'},
-    {label:'Direct Input',  n:t.totalInput,         color:'#3b82f6'},
-    {label:'Output',        n:t.totalOutput,        color:'#a855f7'},
+    {label:'Cache Read',   n:t.totalCacheRead,     color:'#00C99A'},
+    {label:'Cache Write',  n:t.totalCacheCreation, color:'#F5A300'},
+    {label:'Direct Input', n:t.totalInput,         color:'#5B9EFF'},
+    {label:'Output',       n:t.totalOutput,        color:'#A87FFC'},
   ];
-  const barSegs = segs.map(s=>s.n > 0 ?
-    `<div class="token-bar-seg" style="flex:${s.n};background:${s.color}" title="${s.label}: ${F.n(s.n)}"></div>` : '').join('');
+  const bars = segs.map(s=>s.n>0?`<div class="token-bar-seg" style="flex:${s.n};background:${s.color}" title="${esc(s.label)}: ${F.n(s.n)}"></div>`:'').join('');
   const legend = segs.map(s=>`
     <div class="token-legend-item">
       <div class="token-legend-dot" style="background:${s.color}"></div>
@@ -462,24 +1405,163 @@ function renderOverview(){
       <span class="token-legend-val">${F.n(s.n)}</span>
       <span class="token-legend-val">(${F.pct(s.n/total)})</span>
     </div>`).join('');
-
   document.getElementById('token-comp').innerHTML =
-    `<div class="token-bar-wrap"><div class="token-bar">${barSegs}</div></div><div class="token-legend">${legend}</div>`;
+    `<div class="token-bar-wrap"><div class="token-bar">${bars}</div></div><div class="token-legend">${legend}</div>`;
 }
 
-// ─── 2. TOKEN CHART ───────────────────────────────────────────────────────────
+function renderOverview(){
+  renderStatCards(computeSliceStats(D.byDate||[]), false);
+  renderTokenComp(D.tokens || {});
+}
+
+// ── 2. Prompting Score ────────────────────────────────────────────────────────
+function renderPromptingScore(ps){
+  if(ps === undefined) ps = D.promptingScore;
+  const el = document.getElementById('prompting-content');
+
+  if(!ps || !ps.counted){
+    el.innerHTML = `<div class="empty"><div class="empty-icon">📊</div><p>Not enough prompt data to compute a score.<br>Use Claude Code for more sessions and re-run the analysis.</p></div>`;
+    return;
+  }
+
+  const gradeChar = ps.grade[0];
+  const gradeColor = gradeChar==='A'?css('--green'):gradeChar==='B'?css('--blue'):gradeChar==='C'?css('--brand'):gradeChar==='D'?css('--orange'):css('--red');
+  const gradeHex   = gradeChar==='A'?'#00C99A':gradeChar==='B'?'#5B9EFF':gradeChar==='C'?'#F5A300':gradeChar==='D'?'#FF7A30':'#FF5245';
+
+  const avgLen   = ps.avgPromptLength  !== undefined ? ps.avgPromptLength  : (D.verbosity ? D.verbosity.avgPromptLength  : 0);
+  const longCount = ps.longPromptCount !== undefined ? ps.longPromptCount  : (D.verbosity ? D.verbosity.longPromptCount : 0);
+
+  // Score distribution rows
+  const maxHistCount = Math.max(...(ps.histogram||[]).map(h=>h.count), 1);
+  const avgBucket = Math.min(4, Math.floor(ps.avgScore / 20));
+  const histHtml = (ps.histogram||[]).map((h,i)=>{
+    const isActive = i === avgBucket;
+    const widthPct = Math.max(3, Math.round(h.count / maxHistCount * 100));
+    const barColor = isActive ? 'var(--brand)' : 'var(--fg-3)';
+    return `<div class="score-dist-row${isActive?' active':''}">
+      <div class="score-dist-range">${h.range}</div>
+      <div class="score-dist-bar-wrap">
+        <div class="score-dist-bar" style="width:${widthPct}%;background:${barColor}"></div>
+      </div>
+      <div class="score-dist-count">${h.count}</div>
+    </div>`;
+  }).join('');
+
+  // Dimension bars
+  const dimHtml = (ps.dimensions||[]).map(d=>{
+    const pct = d.pct || 0;
+    const barColor = pct>=75?css('--green'):pct>=50?css('--brand'):pct>=30?css('--yellow'):css('--red');
+    return `<div class="dim-row">
+      <div class="dim-row-header">
+        <span class="dim-row-label">${esc(d.label)}</span>
+        <span class="dim-row-meta">${d.score}/${d.max} &nbsp;·&nbsp; ${pct}%</span>
+      </div>
+      <div class="dim-track">
+        <div class="dim-fill" style="width:${pct}%;background:${barColor}"></div>
+      </div>
+      <div class="dim-tip">${esc(d.tip)}</div>
+    </div>`;
+  }).join('');
+
+  // Examples — pick 1 strong and 1 weak with distinct text
+  function exCard(ex, type){
+    const badgeCls = type==='good'?'badge-green':'badge-orange';
+    const label = type==='good'?'Strong prompt':'Needs improvement';
+    return `<div class="score-ex-card ${type}">
+      <div class="score-ex-label ${type}">${label}</div>
+      <div class="score-ex-text">${esc(ex.text)}</div>
+      <span class="score-ex-badge"><span class="badge ${badgeCls}">${ex.score}/100</span></span>
+    </div>`;
+  }
+  const allTop = ps.topExamples||[];
+  const allWeak = ps.weakExamples||[];
+  // Pick the first top example, then find a weak example with different text
+  const topOne = allTop[0];
+  const weakOne = allWeak.find(e => !topOne || e.text.slice(0,40) !== topOne.text.slice(0,40)) || allWeak[0];
+  const topEx  = topOne  ? exCard(topOne, 'good') : '';
+  const weakEx = weakOne ? exCard(weakOne,'weak') : '';
+
+  el.innerHTML = `
+    <div class="score-wall">
+      <div class="score-left">
+        <div class="score-big-grade" style="color:${gradeColor}">${esc(ps.grade)}</div>
+        <div class="score-big-num">${ps.avgScore}<span>/100</span></div>
+        <div class="score-big-label">Prompting Score</div>
+        <div class="score-verdict-blurb">${scoreVerdict(ps.avgScore)}</div>
+      </div>
+      <div class="score-right">
+        <div class="score-dims">
+          <div style="font-family:'Fira Code',monospace;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--fg-3);margin-bottom:16px">Breakdown by Best Practice</div>
+          <div class="dim-list">${dimHtml}</div>
+          <div class="note-box" style="margin-top:16px">
+            Avg prompt length: <strong>${avgLen.toLocaleString()} chars</strong>
+            &nbsp;·&nbsp; Long outliers: <strong>${longCount}</strong>
+            &nbsp;·&nbsp; <strong>${ps.counted.toLocaleString()}</strong> prompts analysed
+          </div>
+        </div>
+        <div class="score-hist-col">
+          <div style="font-family:'Fira Code',monospace;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--fg-3);margin-bottom:14px">Score Distribution</div>
+          <div class="score-dist-rows">${histHtml}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Examples -->
+    ${(topEx || weakEx) ? `
+    <div style="margin-top:24px">
+      <div class="card-title" style="margin-bottom:12px">Example Prompts</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        ${topEx}${weakEx}
+      </div>
+    </div>` : ''}
+  `;
+}
+
+function scoreVerdict(s){
+  if(s>=70) return 'Your prompts are well-crafted — clear, contextual, and structured.';
+  if(s>=50) return 'Good habits. Adding more context and output specs will push you to A.';
+  if(s>=30) return 'Average — prompts work but often lack context or structure.';
+  if(s>=15) return 'Most prompts are short commands. Adding context unlocks better results.';
+  return 'Very sparse prompts detected. More detail leads to significantly better results.';
+}
+
+// ── Interaction Modal ─────────────────────────────────────────────────────────
+function openIpModal(key, label, icon, desc){
+  const prompts = (D.interactionPrompts||{})[key]||[];
+  document.getElementById('ip-modal-icon').textContent  = icon;
+  document.getElementById('ip-modal-label').textContent = label;
+  document.getElementById('ip-modal-count').textContent = prompts.length+' prompt'+(prompts.length!==1?'s':'');
+  document.getElementById('ip-modal-desc').textContent  = desc;
+  const body = document.getElementById('ip-modal-body');
+  body.innerHTML = prompts.length
+    ? prompts.map((p,i)=>`<div class="modal-prompt-item">
+        <div class="modal-prompt-num">#${i+1}</div>
+        <div class="modal-prompt-text">${esc(p)}</div>
+      </div>`).join('')
+    : '<div class="modal-empty">No prompts recorded in this category.</div>';
+  document.getElementById('ip-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeIpModal(e){
+  if(e && e.target!==document.getElementById('ip-modal')) return;
+  document.getElementById('ip-modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeIpModal(); });
+
+// ── 3. Token Chart ────────────────────────────────────────────────────────────
 function renderTokenChart(){
-  if(!D.byDate || !D.byDate.length) return;
-  const labels = D.byDate.map(d => F.sdate(d.date+'T12:00:00Z'));
-  new Chart(document.getElementById('tokenChart'),{
+  if(!D.byDate||!D.byDate.length) return;
+  const labels = D.byDate.map(d=>F.sdate(d.date+'T12:00:00Z'));
+  charts.token = new Chart(document.getElementById('tokenChart'),{
     type:'bar',
     data:{
       labels,
       datasets:[
-        {label:'Cache Read',    data:D.byDate.map(d=>d.cacheRead),     backgroundColor:'rgba(34,197,94,.75)',  stack:'s'},
-        {label:'Cache Write',   data:D.byDate.map(d=>d.cacheCreation), backgroundColor:'rgba(245,158,11,.75)', stack:'s'},
-        {label:'Direct Input',  data:D.byDate.map(d=>d.inputTokens),   backgroundColor:'rgba(59,130,246,.75)', stack:'s'},
-        {label:'Output',        data:D.byDate.map(d=>d.outputTokens),  backgroundColor:'rgba(168,85,247,.75)', stack:'s'},
+        {label:'Cache Read',   data:D.byDate.map(d=>d.cacheRead),     backgroundColor:'rgba(0,201,154,.75)',  stack:'s'},
+        {label:'Cache Write',  data:D.byDate.map(d=>d.cacheCreation), backgroundColor:'rgba(245,163,0,.75)',  stack:'s'},
+        {label:'Direct Input', data:D.byDate.map(d=>d.inputTokens),   backgroundColor:'rgba(91,158,255,.75)', stack:'s'},
+        {label:'Output',       data:D.byDate.map(d=>d.outputTokens),  backgroundColor:'rgba(168,127,252,.75)',stack:'s'},
       ]
     },
     options:{
@@ -487,36 +1569,28 @@ function renderTokenChart(){
       interaction:{mode:'index',intersect:false},
       plugins:{legend:{position:'top',labels:{color:css('--fg-2')}}},
       scales:{
-        x:{stacked:true,grid:{color:css('--border-subtle')},
-          ticks:{color:css('--fg-3'),maxRotation:45,maxTicksLimit:24}},
-        y:{stacked:true,grid:{color:css('--border-subtle')},
-          ticks:{color:css('--fg-3'),callback:v=>F.n(v)}},
+        x:{stacked:true,grid:{color:css('--border-subtle')},ticks:{color:css('--fg-3'),maxRotation:45,maxTicksLimit:24}},
+        y:{stacked:true,grid:{color:css('--border-subtle')},ticks:{color:css('--fg-3'),callback:v=>F.n(v)}},
       }
     }
   });
 }
 
-// ─── 3. CACHE ─────────────────────────────────────────────────────────────────
+// ── 4. Cache ──────────────────────────────────────────────────────────────────
 function renderCache(){
   const c = D.cacheMetrics, s = D.summary;
-  const hitPct = c.hitPercent || 0;
-
-  // Donut
-  document.getElementById('donut-pct').textContent = hitPct + '%';
-  document.getElementById('donut-pct').style.color =
-    hitPct >= 70 ? css('--green') : hitPct >= 40 ? css('--yellow') : css('--red');
-
-  new Chart(document.getElementById('cacheDonut'),{
+  if(!c) return;
+  const hitPct = c.hitPercent||0;
+  document.getElementById('donut-pct').textContent = hitPct+'%';
+  document.getElementById('donut-pct').style.color = hitPct>=70?css('--green'):hitPct>=40?css('--yellow'):css('--red');
+  charts.cacheDonut = new Chart(document.getElementById('cacheDonut'),{
     type:'doughnut',
     data:{
       labels:['Cache Hit (read)','Cache Miss (input + write)'],
       datasets:[{
-        data:[c.cacheReadTokens, c.cacheMissTokens],
-        backgroundColor:[
-          hitPct >= 70 ? '#22c55e' : hitPct >= 40 ? '#eab308' : '#ef4444',
-          css('--border')
-        ],
-        borderWidth:0, hoverOffset:4
+        data:[c.cacheReadTokens,c.cacheMissTokens],
+        backgroundColor:[hitPct>=70?'#00C99A':hitPct>=40?'#F5A300':'#FF5245',css('--border')],
+        borderWidth:0,hoverOffset:4
       }]
     },
     options:{
@@ -524,204 +1598,292 @@ function renderCache(){
       plugins:{
         legend:{position:'bottom',labels:{color:css('--fg-2'),padding:20}},
         tooltip:{callbacks:{label:ctx=>{
-          const tot = (c.cacheReadTokens + c.cacheMissTokens) || 1;
+          const tot=(c.cacheReadTokens+c.cacheMissTokens)||1;
           return ` ${F.n(ctx.parsed)} tokens (${(ctx.parsed/tot*100).toFixed(1)}%)`;
         }}}
       }
     }
   });
+  // Initial render of model-dependent parts using all-time byModel
+  refreshCacheSection(computeSliceByModel(D.byDate||[]));
+}
 
-  // Model table
-  document.getElementById('cache-table').innerHTML = `
+function refreshCacheSection(sliceByModel){
+  let totRead=0, totInput=0, totCreate=0, totCost=0, totUncached=0;
+  for(const m of sliceByModel){
+    totRead    += m.cacheRead;
+    totInput   += m.inputTokens;
+    totCreate  += m.cacheCreation;
+    totCost    += m.cost;
+    totUncached+= m.uncachedCost||0;
+  }
+  const eff = totRead + totInput + totCreate;
+  const hitPct = eff>0 ? Math.round(totRead/eff*100) : 0;
+  const hitColor = hitPct>=70?'#00C99A':hitPct>=40?'#F5A300':'#FF5245';
+
+  const dpct = document.getElementById('donut-pct');
+  if(dpct){ dpct.textContent=hitPct+'%'; dpct.style.color=hitPct>=70?css('--green'):hitPct>=40?css('--yellow'):css('--red'); }
+
+  if(charts.cacheDonut){
+    charts.cacheDonut.data.datasets[0].data=[totRead, totInput+totCreate];
+    charts.cacheDonut.data.datasets[0].backgroundColor=[hitColor, css('--border')];
+    charts.cacheDonut.update('none');
+  }
+
+  const ct = document.getElementById('cache-table');
+  if(ct) ct.innerHTML=`
     <thead><tr><th>Model</th><th class="r">Hit Rate</th><th class="r">Read</th><th class="r">Miss</th></tr></thead>
-    <tbody>${D.byModel.map(m=>{
-      const tot = (m.inputTokens + m.cacheCreation + m.cacheRead) || 1;
-      const p = m.cacheRead / tot;
-      const bc = p>=.7?'badge-green':p>=.4?'badge-yellow':'badge-red';
-      const name = m.model.replace('claude-','').replace(/-\d{8}$/,'');
+    <tbody>${sliceByModel.map(m=>{
+      const tot=(m.inputTokens+m.cacheCreation+m.cacheRead)||1;
+      const p=m.cacheRead/tot;
+      const bc=p>=.7?'badge-green':p>=.4?'badge-yellow':'badge-red';
+      const name=m.model.replace('claude-','').replace(/-\d{8}$/,'');
       return `<tr>
         <td>${esc(name)}</td>
         <td class="r"><span class="badge ${bc}">${(p*100).toFixed(0)}%</span></td>
         <td class="r mono">${F.n(m.cacheRead)}</td>
-        <td class="r mono">${F.n(m.inputTokens + m.cacheCreation)}</td>
+        <td class="r mono">${F.n(m.inputTokens+m.cacheCreation)}</td>
       </tr>`;
     }).join('')}</tbody>`;
 
-  document.getElementById('savings-box').innerHTML = `
-    <div class="savings-title">Saved ${F.usd(s.cacheSavingsUSD)} with caching</div>
-    <div class="savings-sub">Without cache: <span class="mono">${F.usd(s.totalUncachedCost)}</span>
-    &nbsp;·&nbsp; Actual: <span class="mono">${F.usd(s.totalCost)}</span></div>`;
+  const sb = document.getElementById('savings-box');
+  if(sb) sb.innerHTML=`
+    <div class="savings-title">Saved ${F.usd(totUncached-totCost)} with caching</div>
+    <div class="savings-sub">Without cache: <span class="mono">${F.usd(totUncached)}</span>&nbsp;·&nbsp;Actual: <span class="mono">${F.usd(totCost)}</span></div>`;
 }
 
-// ─── 4. COST ──────────────────────────────────────────────────────────────────
+// ── 5. Cost ───────────────────────────────────────────────────────────────────
 function renderCost(){
-  if(!D.byDate || !D.byDate.length) return;
-  const labels = D.byDate.map(d => F.sdate(d.date+'T12:00:00Z'));
-  new Chart(document.getElementById('costChart'),{
+  if(!D.byDate||!D.byDate.length) return;
+  const labels = D.byDate.map(d=>F.sdate(d.date+'T12:00:00Z'));
+  const ctx = document.getElementById('costChart').getContext('2d');
+  const grad = ctx.createLinearGradient(0,0,0,240);
+  grad.addColorStop(0,'rgba(245,163,0,.85)');
+  grad.addColorStop(1,'rgba(245,163,0,.08)');
+  charts.cost = new Chart(ctx,{
     type:'bar',
     data:{
       labels,
-      datasets:[{
-        label:'Cost (USD)',data:D.byDate.map(d=>d.cost),
-        backgroundColor:'rgba(249,115,22,.7)',
-        borderColor:'#f97316',borderWidth:1,borderRadius:3
-      }]
+      datasets:[{label:'Cost (USD)',data:D.byDate.map(d=>d.cost),backgroundColor:grad,borderColor:'rgba(245,163,0,.8)',borderWidth:1,borderRadius:4}]
     },
     options:{
       responsive:true,maintainAspectRatio:false,
       plugins:{legend:{display:false}},
       scales:{
         x:{grid:{display:false},ticks:{color:css('--fg-3'),maxRotation:45,maxTicksLimit:24}},
-        y:{grid:{color:css('--border-subtle')},ticks:{color:css('--fg-3'),
-          callback:v=>v>=1?'$'+v.toFixed(1):'$'+v.toFixed(3)}}
+        y:{grid:{color:css('--border-subtle')},ticks:{color:css('--fg-3'),callback:v=>v>=1?'$'+v.toFixed(1):'$'+v.toFixed(3)}}
       }
     }
   });
+  // Initial render using all-time data
+  refreshCostModelTable(computeSliceByModel(D.byDate||[]));
+}
 
-  document.getElementById('cost-table').innerHTML = `
+function refreshCostModelTable(sliceByModel){
+  const ct = document.getElementById('cost-table');
+  if(!ct) return;
+  ct.innerHTML=`
     <thead><tr><th>Model</th><th class="r">Msgs</th><th class="r">Output</th><th class="r">Cost</th></tr></thead>
-    <tbody>${D.byModel.map(m=>`<tr>
+    <tbody>${sliceByModel.map(m=>`<tr>
       <td>${esc(m.model.replace('claude-','').replace(/-\d{8}$/,''))}</td>
       <td class="r mono">${m.messageCount.toLocaleString()}</td>
       <td class="r mono">${F.n(m.outputTokens)}</td>
-      <td class="r mono" style="color:var(--accent)">${F.usd4(m.cost)}</td>
+      <td class="r mono" style="color:var(--brand)">${F.usd4(m.cost)}</td>
     </tr>`).join('')}</tbody>`;
 }
 
-// ─── 5. VERBOSITY ─────────────────────────────────────────────────────────────
-function renderVerbosity(){
-  const vb = D.verbosity;
-  const hist = vb.promptHistogram || [];
+// ── 6a. Interaction patterns ──────────────────────────────────────────────────
+function renderInteractionPatterns(ip){
+  ip = ip || D.interactionPatterns;
+  const el = document.getElementById('interaction-chips');
+  if(!el) return;
+  // Clear any previously appended note boxes
+  el.parentElement.querySelectorAll('.note-box').forEach(n=>n.remove());
+  if(!ip){ el.innerHTML=''; return; }
 
-  if(hist.length && hist.some(b=>b.count>0)){
-    new Chart(document.getElementById('lenChart'),{
-      type:'bar',
-      data:{
-        labels:hist.map(b=>b.label),
-        datasets:[{
-          label:'Prompts',data:hist.map(b=>b.count),
-          backgroundColor:'rgba(59,130,246,.65)',
-          borderColor:'#3b82f6',borderWidth:1,borderRadius:3
-        }]
-      },
-      options:{
-        responsive:true,maintainAspectRatio:false,
-        plugins:{legend:{display:false}},
-        scales:{
-          x:{grid:{display:false},ticks:{color:css('--fg-3'),maxRotation:45,font:{size:10}}},
-          y:{grid:{color:css('--border-subtle')},ticks:{color:css('--fg-3')}}
-        }
-      }
-    });
-  }
+  const total = Object.values(ip).reduce((a,b)=>a+b,0)||1;
+  const chips = [
+    { key:'directive',    icon:'🎯', label:'Directive', desc:'Clear action-verb prompts — the most effective pattern' },
+    { key:'question',     icon:'❓', label:'Question',  desc:'"How do I…" style — good for exploration' },
+    { key:'continuation', icon:'▶️', label:'Continue',  desc:'Short follow-ons: "ok", "go ahead", "next"' },
+    { key:'formatChange', icon:'🔄', label:'Reformat',  desc:'Asking to change output format mid-conversation' },
+    { key:'clarification',icon:'💬', label:'Clarify',   desc:'Adjusting or redirecting the previous response' },
+    { key:'interruption', icon:'✋', label:'Interrupt',  desc:'Stopping mid-task: "stop", "cancel", "wait"' },
+  ];
 
-  const ratio = vb.avgRatio || 0;
-  const rColor = ratio > 10 ? css('--red') : ratio > 4 ? css('--yellow') : css('--green');
-  const rLabel = ratio > 10 ? 'Very high — prompts contain non-human text' : ratio > 4 ? 'High' : 'Efficient';
-
-  document.getElementById('verb-metrics').innerHTML = [
-    ['Avg Input : Output Ratio', `<span style="color:${rColor};font-family:'JetBrains Mono',monospace">${ratio.toFixed(1)} : 1</span>`],
-    ['Assessment', `<span style="color:${rColor}">${rLabel}</span>`],
-    ['Avg Prompt Length', `<span class="mono">${(vb.avgPromptLength||0).toLocaleString()} chars</span>`],
-    ['Long Prompts (>P95)', `<span class="mono">${(vb.longPromptCount||0).toLocaleString()}</span>`],
-    ['P95 Length Threshold', `<span class="mono">${(vb.longPromptThreshold||0).toLocaleString()} chars</span>`],
-  ].map(([lbl,val])=>`
-    <div class="metric-row">
-      <span class="metric-label">${lbl}</span>
-      <span class="metric-val">${val}</span>
-    </div>`).join('') + `
-    <div style="margin-top:16px;padding:12px;border-radius:var(--radius);background:var(--surface-2);
-      font-size:12px;color:var(--fg-3);line-height:1.6">
-      ${ratio > 10
-        ? '⚠️ Very high ratio likely due to tool results in user turns. Human-only prompt verbosity appears normal.'
-        : ratio > 4
-          ? '⚠️ Prompts generate relatively little output. Consider more directive, concise prompts.'
-          : '✓ Prompt efficiency looks good.'}
+  el.innerHTML = chips.map(c=>{
+    const count = ip[c.key]||0;
+    return `<div class="pattern-chip"
+        data-ip-key="${c.key}"
+        data-ip-label="${esc(c.label)}"
+        data-ip-icon="${c.icon}"
+        data-ip-desc="${esc(c.desc)}"
+        title="Click to view prompts">
+      <div class="pattern-chip-icon">${c.icon}</div>
+      <div class="pattern-chip-count">${count}</div>
+      <div class="pattern-chip-label">${c.label}</div>
+      <div class="pattern-chip-desc">${c.desc}</div>
     </div>`;
+  }).join('');
+
+  el.querySelectorAll('.pattern-chip[data-ip-key]').forEach(chip=>{
+    chip.addEventListener('click',()=>{
+      openIpModal(chip.dataset.ipKey, chip.dataset.ipLabel, chip.dataset.ipIcon, chip.dataset.ipDesc);
+    });
+  });
+
+  // Add insight about format changes
+  if((ip.formatChange||0) >= 3){
+    const note = document.createElement('div');
+    note.className = 'note-box';
+    note.style.marginTop = '0';
+    note.innerHTML = `💡 You've requested format changes <strong>${ip.formatChange}</strong> times. Add a default format preference to <code>CLAUDE.md</code> to avoid this overhead.`;
+    el.parentElement.appendChild(note);
+  }
+  if((ip.interruption||0) >= 5){
+    const note = document.createElement('div');
+    note.className = 'note-box';
+    note.style.marginTop = '8px';
+    note.innerHTML = `💡 <strong>${ip.interruption}</strong> interruptions detected. Providing clearer scope upfront reduces mid-task stops.`;
+    el.parentElement.appendChild(note);
+  }
 }
 
-// ─── 6. CLUSTERS ──────────────────────────────────────────────────────────────
+// ── 6b. Clusters ──────────────────────────────────────────────────────────────
 function renderClusters(){
-  const clusters = D.clusters || [];
+  const clusters = D.clusters||[];
   const el = document.getElementById('cluster-card');
-
   if(!clusters.length){
-    el.innerHTML = `<div class="empty"><div class="empty-icon">✨</div>No significant repeated patterns found — prompts are varied.</div>`;
+    el.innerHTML=`<div class="empty"><div class="empty-icon">✨</div><p>No significant repeated patterns — your prompts are varied.</p></div>`;
     return;
   }
-
-  el.innerHTML = `
+  el.innerHTML=`
     <div class="cluster-header">
-      <span style="font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--fg-3)">Representative Prompt</span>
-      <span style="font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--fg-3);text-align:right">Count</span>
-      <span style="font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--fg-3);text-align:right">Similarity</span>
+      <span style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--fg-3)">Representative Prompt</span>
+      <span style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--fg-3);text-align:right">Count</span>
+      <span style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--fg-3);text-align:right">Similarity</span>
     </div>
     ${clusters.map(c=>`
       <div class="cluster-row">
         <div class="cluster-text" title="${esc(c.representative)}">${esc(c.representative)}</div>
         <div style="text-align:right"><span class="badge badge-yellow">${c.count}×</span></div>
-        <div style="text-align:right;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--fg-3)">${(c.avgSimilarity*100).toFixed(0)}%</div>
+        <div style="text-align:right;font-size:12px;color:var(--fg-3);font-variant-numeric:tabular-nums">${(c.avgSimilarity*100).toFixed(0)}%</div>
       </div>`).join('')}
     <div class="cluster-footer">
-      💡 These prompt patterns are candidates for
-      <code style="background:var(--surface-hover);padding:1px 5px;border-radius:4px">CLAUDE.md</code> instructions or Claude Code skills.
+      💡 These patterns are strong candidates for <code>CLAUDE.md</code> instructions or reusable Claude Code skills — see the Insights section below.
     </div>`;
 }
 
-// ─── 7. RECOMMENDATIONS ───────────────────────────────────────────────────────
-function renderRecs(){
-  const s = D.summary, c = D.cacheMetrics, vb = D.verbosity;
-  const clusters = D.clusters || [];
-  const hitPct = c.hitPercent || 0;
+// ── 6c. Template suggestions ──────────────────────────────────────────────────
+function renderTemplates(){
+  const templates = D.templateSuggestions||[];
+  const el = document.getElementById('templates-section');
+  if(!templates.length){ el.innerHTML=''; return; }
 
+  const hdr = document.createElement('div');
+  hdr.innerHTML = '<div class="card-title" style="margin-bottom:16px">Reusable Prompt Templates</div>';
+  el.appendChild(hdr);
+
+  templates.forEach(t=>{
+    if(!t.improvements||!t.improvements.length) return; // skip if already well-formed
+
+    const improvedHtml = highlightPlaceholders(esc(t.template));
+    const impTags = t.improvements.map(i=>`<span class="improvement-tag">+ ${esc(i)}</span>`).join('');
+
+    const card = document.createElement('div');
+    card.className = 'template-card';
+    card.innerHTML = `
+      <div class="template-card-header">
+        <span class="template-card-title">Template · used ${t.count}× similar</span>
+        <div class="template-card-meta">
+          ${impTags}
+        </div>
+      </div>
+      <div class="template-card-body">
+        <div class="template-original">Original pattern</div>
+        <div class="template-original-text">${esc(t.pattern)}</div>
+        <div class="template-improved-label">Improved template</div>
+        <div class="template-pre" id="tp-${Math.random().toString(36).slice(2)}">${improvedHtml}<button class="copy-btn" onclick="copyTemplate(this, ${JSON.stringify(t.template)})">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copy
+        </button></div>
+      </div>`;
+    el.appendChild(card);
+  });
+}
+
+function highlightPlaceholders(html){
+  return html.replace(/\{[^}]+\}/g, m=>`<span class="template-placeholder">${m}</span>`);
+}
+
+function copyTemplate(btn, text){
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent = '✓ Copied';
+    btn.classList.add('copied');
+    setTimeout(()=>{ btn.innerHTML='<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy'; btn.classList.remove('copied'); }, 2000);
+  }).catch(()=>{ btn.textContent='Copy failed'; });
+}
+
+// ── 7a. Recommendations ───────────────────────────────────────────────────────
+function renderRecs(){
+  const s = D.summary, c = D.cacheMetrics, ps = D.promptingScore;
+  const clusters = D.clusters||[];
+  const ip = D.interactionPatterns||{};
+  const hitPct = c ? c.hitPercent||0 : 0;
   const recs = [];
 
   if(hitPct < 60) recs.push({sev:'high',icon:'🔄',
     title:`Cache Hit Rate is Only ${hitPct}%`,
-    desc:`${100-hitPct}% of your input tokens miss the cache and are billed at full price. This is the single biggest cost driver. Moving repeated context — instructions, project conventions, background — into CLAUDE.md lets Claude Code cache it automatically.`,
-    action:'Create a CLAUDE.md at your project root with the context you repeat most often across sessions.'
+    desc:`${100-hitPct}% of input tokens miss the cache and bill at full price. Repeated context — project conventions, tech stack, background — should live in CLAUDE.md so Claude Code caches it automatically.`,
+    action:'Create a CLAUDE.md at your project root with the context you repeat most across sessions.'
   });
 
-  if(hitPct >= 70) recs.push({sev:'good',icon:'⚡',
+  if(hitPct>=70) recs.push({sev:'good',icon:'⚡',
     title:`${hitPct}% Cache Hit Rate — Excellent`,
-    desc:`Your cache is working well. At ${F.usd(s.cacheSavingsUSD)} saved, caching is your biggest cost-reduction lever and it's already optimised. Keep repeated context in CLAUDE.md and system prompts to maintain this.`,
-    action:'Monitor this metric as you start new projects — cache efficiency drops when context drifts.'
+    desc:`At ${F.usd(s.cacheSavingsUSD)} saved, caching is your biggest cost lever and it\'s already optimised. Keep repeated context in CLAUDE.md and system prompts to maintain this rate as you start new projects.`,
+    action:'Monitor cache hit rate when starting new projects — it typically drops as context drifts.'
+  });
+
+  if(ps && ps.avgScore < 55) recs.push({sev:'high',icon:'✍️',
+    title:`Prompting Score ${ps.grade} — Room to Improve`,
+    desc:`Your prompts average ${ps.avgScore}/100. ${getWeakDimAdvice(ps)}`,
+    action:'Use the template cards in the Patterns section as a starting point for common workflows.'
+  });
+
+  if(ps && ps.avgScore >= 80) recs.push({sev:'good',icon:'🎯',
+    title:`Prompting Score ${ps.grade} — Strong`,
+    desc:`Your prompts are clear, contextual, and structured. This reduces back-and-forth and gets better results on the first try.`,
+    action:'Continue using structured prompts with clear output specifications.'
   });
 
   if(clusters.length >= 3) recs.push({sev:'medium',icon:'📋',
     title:`${clusters.length} Repeated Prompt Patterns`,
-    desc:`Several of your prompts are structurally similar. Recurring workflows — deploy, review, test, summarise — are the best candidates for Claude Code skills or hooks that run automatically.`,
-    action:'Use /skill-creator to turn your most-repeated workflows into reusable /slash commands.'
+    desc:`Several prompts are structurally similar. Recurring workflows — deploy, review, test, summarise — are the best candidates for Claude Code skills that run with a single slash command.`,
+    action:'Run /skill-creator and describe your most-repeated workflow to create a reusable /command.'
   });
 
-  const haiku = s.modelsUsed.some(m=>m.includes('haiku'));
-  if(!haiku && s.totalCost > 1) recs.push({sev:'low',icon:'💰',
+  const haiku = (s.modelsUsed||[]).some(m=>m.includes('haiku'));
+  if(!haiku && s.totalCost>1) recs.push({sev:'low',icon:'💰',
     title:'All Usage on Premium Models',
-    desc:`You're only using ${s.modelsUsed.map(m=>m.replace('claude-','')).join(' and ')}. Simple tasks — formatting, lookups, summarisation, small edits — cost 4–10× less on Claude Haiku with negligible quality difference.`,
-    action:'Route simple, high-volume tasks to claude-haiku-4-5 to cut your bill without sacrificing output quality.'
+    desc:`You're only on ${(s.modelsUsed||[]).map(m=>m.replace('claude-','')).join(' and ')}. Simple tasks — formatting, lookups, summarisation, quick edits — cost 4–10× less on Claude Haiku with negligible quality difference.`,
+    action:'Route simple, high-volume tasks to claude-haiku-4-5 to cut your bill without sacrificing quality.'
   });
 
-  if((vb.longPromptCount||0) > 5) recs.push({sev:'low',icon:'📏',
-    title:`${vb.longPromptCount} Very Long Prompts Detected`,
-    desc:`${vb.longPromptCount} prompts exceed the 95th percentile in length (>${(vb.longPromptThreshold||0).toLocaleString()} chars). Very long prompts often contain pasted documentation or repeated context that could instead live in CLAUDE.md or be loaded via file attachment.`,
-    action:"Use Claude Code's file attachment feature instead of pasting large text blocks."
+  if((ip.formatChange||0)>=5) recs.push({sev:'medium',icon:'📐',
+    title:`${ip.formatChange} Format Change Requests`,
+    desc:`You\'ve asked Claude to change its output format ${ip.formatChange} times. Setting a default in CLAUDE.md (e.g. "use markdown, always use code blocks") eliminates this repeated overhead.`,
+    action:'Add a "# Response Format" section to CLAUDE.md with your preferred output style.'
   });
 
   if(!recs.length) recs.push({sev:'good',icon:'🎉',
     title:'Everything Looks Good',
-    desc:'Cache hit rate is high, no significant repeated patterns, and prompt sizes are reasonable. Your usage is well-optimised.',
+    desc:'Cache hit rate is high, no significant repeated patterns, and prompt quality is solid. Your usage is well-optimised.',
     action:'Keep monitoring with /prompt-analysis as usage grows across new projects.'
   });
 
-  const sevStyles = {
-    high:   {cls:'high',   badge:'badge-red'},
-    medium: {cls:'medium', badge:'badge-yellow'},
-    low:    {cls:'low',    badge:'badge-blue'},
-    good:   {cls:'good',   badge:'badge-green'},
-  };
-
+  const sevStyles = {high:{cls:'high',badge:'badge-red'},medium:{cls:'medium',badge:'badge-yellow'},low:{cls:'low',badge:'badge-blue'},good:{cls:'good',badge:'badge-green'}};
   document.getElementById('recs-grid').innerHTML = recs.map(r=>{
-    const st = sevStyles[r.sev];
+    const st=sevStyles[r.sev];
     return `<div class="rec-card ${st.cls}">
       <span class="rec-icon">${r.icon}</span>
       <div class="rec-header">
@@ -734,23 +1896,87 @@ function renderRecs(){
   }).join('');
 }
 
-// ─── NAV ACTIVE STATE ─────────────────────────────────────────────────────────
-function initNavHighlight(){
-  const sections = document.querySelectorAll('section[id]');
-  const links = document.querySelectorAll('.nav a');
-  const obs = new IntersectionObserver(entries=>{
-    entries.forEach(e=>{
-      if(e.isIntersecting){
-        links.forEach(l=>l.classList.remove('active'));
-        const active = document.querySelector(`.nav a[href="#${e.target.id}"]`);
-        if(active) active.classList.add('active');
-      }
-    });
-  },{rootMargin:'-30% 0px -60% 0px'});
-  sections.forEach(s=>obs.observe(s));
+function getWeakDimAdvice(ps){
+  if(!ps||!ps.dimensions) return '';
+  const weakDim = [...ps.dimensions].sort((a,b)=>a.pct-b.pct)[0];
+  if(!weakDim) return '';
+  const advice = {
+    directness:  'Start prompts with an action verb (Fix, Create, Review) for immediate clarity.',
+    context:     'Add a "Context:" line explaining WHY — Claude generalises from motivation better than rules.',
+    examples:    'Include a concrete example or code block of what you expect. Few-shot prompting is highly effective.',
+    structure:   'Use numbered steps or XML tags (<instructions>) to organise multi-part requests.',
+    outputSpec:  'Specify the output format (JSON, list, prose) and any constraints ("do not", "only", "max 3 items").',
+  };
+  return `Weakest dimension: ${weakDim.label} (${weakDim.pct}%). ${advice[weakDim.key]||''}`;
 }
 
-// ─── INIT ─────────────────────────────────────────────────────────────────────
+// ── 7b. CLAUDE.md builder ─────────────────────────────────────────────────────
+function renderClaudeMd(){
+  const suggs = D.claudeMdSuggestions||[];
+  const el = document.getElementById('claudemd-section');
+  if(!suggs.length){ el.innerHTML=''; return; }
+
+  const typeCls = { context:'claudemd-type-context', behavior:'claudemd-type-behavior', skill:'claudemd-type-skill', style:'claudemd-type-style' };
+  const typeLabel = { context:'Context', behavior:'Behavior', skill:'Skill', style:'Style' };
+
+  let html = `<div class="card-title" style="margin-bottom:4px">CLAUDE.md Builder</div>
+    <p style="font-size:13px;color:var(--fg-3);margin-bottom:20px">Paste any of these blocks into your project's <code style="font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--surface-2);padding:1px 5px;border-radius:4px">CLAUDE.md</code> to automatically improve future sessions.</p>`;
+
+  suggs.forEach(sg=>{
+    const tc = typeCls[sg.type]||'badge-brand';
+    const tl = typeLabel[sg.type]||sg.type;
+    const id = 'cmd-'+Math.random().toString(36).slice(2);
+    html += `<div class="claudemd-card">
+      <div class="claudemd-header">
+        <div class="claudemd-icon-title">
+          <span style="font-size:20px">${sg.icon||'📄'}</span>
+          <span class="claudemd-title">${esc(sg.title)}</span>
+        </div>
+        <span class="claudemd-type-badge ${tc}">${tl}</span>
+      </div>
+      <div class="claudemd-body">
+        <div class="claudemd-reason">${esc(sg.reason)}</div>
+        <div class="claudemd-pre" id="${id}">${esc(sg.content)}<button class="copy-btn" onclick="copyTemplate(this, ${JSON.stringify(sg.content)})">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copy
+        </button></div>
+      </div>
+    </div>`;
+  });
+
+  el.innerHTML = html;
+}
+
+// ── Nav active state ──────────────────────────────────────────────────────────
+function initNavHighlight(){
+  const sections = [...document.querySelectorAll('section[id]')];
+  const links    = [...document.querySelectorAll('#main-nav a')];
+  if(!sections.length || !links.length) return;
+
+  function setActive(id){
+    links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#'+id));
+  }
+
+  // Track which sections are currently intersecting; always highlight the
+  // one whose top edge is closest to (but below) the sticky nav band.
+  const visible = new Set();
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => e.isIntersecting ? visible.add(e.target) : visible.delete(e.target));
+    if(!visible.size) return;
+    // Pick the section with the smallest positive-or-zero top offset from viewport
+    let best = null, bestDist = Infinity;
+    for(const el of visible){
+      const top = el.getBoundingClientRect().top;
+      const dist = top >= 0 ? top : -top * 3; // penalise sections already scrolled past
+      if(dist < bestDist){ bestDist = dist; best = el; }
+    }
+    if(best) setActive(best.id);
+  }, {rootMargin:'-15% 0px -75% 0px', threshold: 0});
+
+  sections.forEach(s => obs.observe(s));
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', ()=>{
   const d = new Date(GENERATED_AT);
   const ts = d.toLocaleString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
@@ -759,14 +1985,17 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
   chartDefaults();
 
-  try { renderOverview(); }   catch(e){ console.error('overview',e); }
-  try { renderTokenChart(); } catch(e){ console.error('tokens',e); }
-  try { renderCache(); }      catch(e){ console.error('cache',e); }
-  try { renderCost(); }       catch(e){ console.error('cost',e); }
-  try { renderVerbosity(); }  catch(e){ console.error('verbosity',e); }
-  try { renderClusters(); }   catch(e){ console.error('clusters',e); }
-  try { renderRecs(); }       catch(e){ console.error('recs',e); }
-
+  try { initTimeRange(); }            catch(e){ console.error('timerange',e); }
+  try { renderOverview(); }           catch(e){ console.error('overview',e); }
+  try { renderPromptingScore(); }     catch(e){ console.error('prompting',e); }
+  try { renderTokenChart(); }         catch(e){ console.error('tokens',e); }
+  try { renderCache(); }              catch(e){ console.error('cache',e); }
+  try { renderCost(); }               catch(e){ console.error('cost',e); }
+  try { renderInteractionPatterns(); }catch(e){ console.error('interactions',e); }
+  try { renderClusters(); }           catch(e){ console.error('clusters',e); }
+  try { renderTemplates(); }          catch(e){ console.error('templates',e); }
+  try { renderRecs(); }               catch(e){ console.error('recs',e); }
+  try { renderClaudeMd(); }           catch(e){ console.error('claudemd',e); }
   initNavHighlight();
 });
 </script>

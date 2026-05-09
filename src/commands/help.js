@@ -2,10 +2,10 @@
 
 function run() {
   console.log(`
-@ravipatel7/prompt-analyzer — Claude Code session analysis tool
+@ravilabs/prompt-analyser — Claude Code session analysis tool
 
 USAGE
-  npx @ravipatel7/prompt-analyzer [command] [options]
+  npx @ravilabs/prompt-analyser [command] [options]
 
 COMMANDS
   (default)           Analyze all sessions and open HTML report in browser
@@ -15,10 +15,10 @@ COMMANDS
   help                Show this message
 
 EXAMPLES
-  npx @ravipatel7/prompt-analyzer
-  npx @ravipatel7/prompt-analyzer install
-  npx @ravipatel7/prompt-analyzer install --local
-  npx @ravipatel7/prompt-analyzer analyze
+  npx @ravilabs/prompt-analyser
+  npx @ravilabs/prompt-analyser install
+  npx @ravilabs/prompt-analyser install --local
+  npx @ravilabs/prompt-analyser analyze
 
 REPORT SECTIONS
   1. Executive Summary    — Sessions, prompts, cost, cache hit rate
